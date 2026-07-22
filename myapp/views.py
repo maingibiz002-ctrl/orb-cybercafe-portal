@@ -127,21 +127,14 @@ def guest_portal(request):
 
 
 @csrf_exempt
+
+# 1. BROWSER REDIRECT VIEW (GET requests only)
 def paystack_callback(request):
     paystack = PaystackGateway()
-    
-    # Extract reference whether request is POST (Webhook) or GET (Browser Redirect)
-    if request.method == 'POST':
-        try:
-            payload = json.loads(request.body.decode('utf-8'))
-            reference = payload.get('data', {}).get('reference')
-        except Exception:
-            reference = None
-    else:
-        reference = request.GET.get('reference')
+    reference = request.GET.get('reference')
 
     if reference:
-        print(f"\n[PROCESSING PAYMENT] Reference: {reference} (Method: {request.method})")
+        print(f"\n[PROCESSING REDIRECT] Reference: {reference} (Method: GET)")
         verified_data = paystack.verify_transaction(reference)
         
         if verified_data and verified_data.get('status') == 'success':
@@ -167,13 +160,54 @@ def paystack_callback(request):
             except Transaction.DoesNotExist:
                 print(f"❌ [ERROR] Reference {reference} not found in database.")
 
-    # Return JSON for Webhook POST requests
-    if request.method == 'POST':
-        return JsonResponse({"status": "processed"}, status=200)
-
-    # Return rendered UI page for GET browser redirects
+    # Always render the portal UI for human users on GET
     packages = Package.objects.all().order_by('price')
     return render(request, 'index.html', {
         'packages': packages,
-        'success_message': f'Payment successfully confirmed! Reference: {reference}'
+        'success_message': f'Payment successfully confirmed! Reference: {reference}' if reference else None
     })
+
+
+# 2. PAYSTACK WEBHOOK VIEW (POST requests only from Paystack servers)
+@csrf_exempt
+def paystack_webhook(request):
+    if request.method == 'POST':
+        try:
+            payload = json.loads(request.body.decode('utf-8'))
+            event = payload.get('event')
+            
+            # Webhooks trigger for many events; process transaction ONLY on successful charge
+            if event == 'charge.success':
+                reference = payload.get('data', {}).get('reference')
+                
+                if reference:
+                    print(f"\n[PROCESSING WEBHOOK] Event: {event} | Reference: {reference}")
+                    paystack = PaystackGateway()
+                    verified_data = paystack.verify_transaction(reference)
+                    
+                    if verified_data and verified_data.get('status') == 'success':
+                        verified_amount = float(verified_data.get('amount', 0)) / 100
+                        
+                        try:
+                            transaction = Transaction.objects.get(mpesa_checkout_id=reference)
+                            
+                            if transaction.status == 'PENDING':
+                                if abs(float(transaction.amount) - verified_amount) < 0.01:
+                                    transaction.status = 'COMPLETED'
+                                    transaction.mpesa_receipt_code = reference 
+                                    transaction.save()
+                                    print(f"✅ [SUCCESS] Transaction {reference} updated via Webhook!")
+                                    
+                                    # Authorize router access
+                                    authorize_internet_access(transaction)
+                                else:
+                                    print(f"⚠️ [WARNING] Webhook Amount mismatch! Expected KES {transaction.amount}, got KES {verified_amount}")
+                            else:
+                                print(f"ℹ️ [NOTICE] Transaction {reference} was already completed.")
+                        except Transaction.DoesNotExist:
+                            print(f"❌ [ERROR] Webhook reference {reference} not found in database.")
+        except Exception as e:
+            print(f"❌ [WEBHOOK ERROR] {str(e)}")
+
+    # Always respond with 200 OK JSON to Paystack's background server ping
+    return JsonResponse({"status": "processed"}, status=200)
