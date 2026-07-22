@@ -1,0 +1,66 @@
+/* myapp/static/myapp/css/style.css */
+
+/* 1. Global Setup (White & Light Gray Backgrounds) */
+body {
+    background-color: #f9f9f9;
+    color: #111111; /* Dark near-black for body text */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* 2. Hero Section (Deep Black Gradient with Orange Accents) */
+.hero-section {
+    background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+    color: #ffffff;
+    padding: 60px 0;
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+    margin-bottom: 40px;
+    border-bottom: 4px solid #ff6600; /* Orange highlight line at the bottom */
+}
+
+/* Make the WiFi icon glow orange in the hero section */
+.hero-section .bi-wifi {
+    color: #ff6600;
+}
+
+/* 3. Package Cards (Clean White with Dark Text) */
+.package-card {
+    background-color: #ffffff;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid #e0e0e0;
+    border-radius: 16px;
+}
+
+.package-card:hover {
+    transform: translateY(-5px);
+    /* Soft orange-tinted shadow on hover */
+    box-shadow: 0 10px 20px rgba(255, 102, 0, 0.15) !important;
+    border-color: #ff6600;
+}
+
+/* 4. Action Buttons (Bold #ff6600 Orange & White Text) */
+.btn-pay {
+    background-color: #ff6600;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+.btn-pay:hover {
+    background-color: #000000; /* Swaps to clean black on hover */
+    color: #ffffff;
+}
+
+/* 5. Custom Utility Overrides */
+/* This forces Bootstrap's standard blue text (.text-primary) to render in your gorgeous orange */
+.text-primary {
+    color: #ff6600 !important;
+}
+
+/* Keeps the actual M-Pesa branding green inside the payment modal */
+.mpesa-color {
+    color: #4eb84e;
+    font-weight: bold;
+}

@@ -1,0 +1,898 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* The most important line for layout */
+}
+/*--------------------------------------------------------------------*/
+    
+    /* Color Variable Definitions */
+:root {
+    --primary-orange: #FF6B00;
+    --deep-black: #000000;
+    --pure-white: #FFFFFF;
+    --off-white: #E0E0E0;
+    --dark-gray: #1A1A1A;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: var(--deep-black);
+}
+
+/* Navbar Style */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background: rgba(12, 12, 12, 0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 2px solid var(--primary-orange);
+    padding: 18px 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 25px;
+
+}
+
+/* Logo */
+.logo {
+    text-decoration: none;
+    color: var(--pure-white);
+    font-weight: 800;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+}
+
+.logo .symbol {
+    background: var(--primary-orange);
+    color: var(--deep-black);
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-right: 5px;
+}
+
+.logo .highlight {
+    color: var(--primary-orange);
+}
+
+/* Navigation Links */
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 35px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--off-white);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: var(--primary-orange);
+}
+
+/* Dropdown Menu */
+.dropdown {
+    position: relative;
+}
+
+.submenu {
+    position: absolute;
+    top: 130%;
+    left: 0;
+    background: var(--dark-gray);
+    min-width: 240px;
+    padding: 10px 0;
+    border-top: 3px solid var(--primary-orange);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(15px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dropdown:hover .submenu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.submenu li a {
+    padding: 12px 20px;
+    text-transform: none;
+    display: block;
+    color: var(--pure-white);
+}
+
+.submenu li a:hover {
+    background: var(--primary-orange);
+    color: var(--deep-black);
+}
+
+/* CTA Button */
+.btn-primary {
+    background: var(--primary-orange);
+    color: var(--deep-black) !important;
+    padding: 12px 24px;
+    border-radius: 2px; /* Sharper edges for a 'Quant' feel */
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    background: var(--pure-white);
+    box-shadow: 0 0 20px rgba(255, 107, 0, 0.4);
+}
+.footer{
+    background-color: var(--deep-black);
+}
+/*------------------------------------------------------------------------------body -----------------------------*/
+/* --- ----Slideshow Engine --- */
+/* --- Ticker Styling --- */
+.market-overview {
+    background-color: #050505;
+    padding: 60px 0;
+    overflow: hidden;
+}
+
+.slider-title {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 0 10%;
+}
+
+.slider-title h2 {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.slider-title p {
+    color: #a0a0a0;
+}
+
+/* The Ticker Engine */
+.market-ticker-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    background: #111;
+    padding: 20px 0;
+    border-top: 1px solid #333;
+    border-bottom: 1px solid #333;
+}
+
+.market-ticker-track {
+    display: flex;
+    width: calc(250px * 12); /* Based on card width * total cards */
+    animation: scrollMarket 40s linear infinite;
+}
+
+.market-card {
+    width: 250px;
+    padding: 0 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-right: 1px solid #222;
+}
+
+.market-card .symbol {
+    color: #d36b2d; /* Signature Orange */
+    font-weight: 800;
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+}
+
+.market-card .price {
+    color: white;
+    font-size: 1.4rem;
+    font-weight: 900;
+}
+
+.market-card .change {
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+.change.up { color: #00ff00; }
+.change.down { color: #ff3333; }
+/* -------------------------------------------- End of Ticker Styles --- */
+
+/* Animation Keyframes */
+@keyframes scrollMarket {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(-250px * 6)); } /* Move by half the track length */
+}
+
+/* Pause on Hover so users can read specific data */
+.market-ticker-container:hover .market-ticker-track {
+    animation-play-state: paused;
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 900px) {
+    .pestle-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 600px) {
+    .pestle-grid { grid-template-columns: repeat(2, 1fr); }
+}
+.background-slideshow {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    z-index: -1; /* Keeps it behind your text */
+}
+
+.slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    animation: slideAnimation 32s infinite; /* 3 slides x 6 seconds each */
+    filter: brightness(0.4) blur(2px); /* Matches your dark, blurred theme */
+}
+
+/* Background Images */
+.slide-1 { background-image: url('background.jpg'); animation-delay: 0s; }
+.slide-2 { background-image: url('background2.jpg'); animation-delay: 6s; }
+.slide-3 { background-image: url('background3.jpg'); animation-delay: 12s; }
+
+@keyframes slideAnimation {
+    0% { opacity: 0; }
+    10% { opacity: 1; }  /* Fade in */
+    33% { opacity: 1; }  /* Stay visible */
+    43% { opacity: 0; }  /* Fade out */
+    100% { opacity: 0; }
+}
+
+
+
+
+
+
+
+
+
+
+/* --- Global Container Adjustment --- */
+body {
+    background-color: #000;
+    color: white;
+    overflow-x: hidden;
+}
+
+/* --- 1. HERO WRAPPER (The Container) --- */
+.hero-slider-section {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    overflow: hidden;
+    display: block; /* Ensures it pushes next sections down */
+    background: #000;
+}
+
+/* --- 2. THE VIEWPORT (The Mask) --- */
+.carousel-view {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+/* --- 3. THE ANIMATED TRACK --- */
+.slide-track {
+    display: flex;
+    width: 400%; /* 4 slides = 400% */
+    height: 100%;
+    position: relative;
+    left: 0;
+    /* This animation handles the 4-page scroll */
+    animation: slideTrackLTR 24s cubic-bezier(0.7, 0, 0.3, 1) infinite;
+}
+
+/* --- 4. THE INDIVIDUAL SLIDE --- */
+.carousel-slide {
+    width: 25%; /* Exactly 1/4 of the 400% track */
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Align content to left edge */
+    padding: 60px 2%; /* 2% padding for left-edge focus */
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+/* --- 5. CONTENT ALIGNMENT --- */
+.content-overlay {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+}
+
+.slide-title {
+    font-size: 5.5rem;
+    font-weight: 900;
+    line-height: 0.85;
+    margin-left: 0;
+    padding-left: 0;
+}
+.slide-description {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    color: #a0a0a0;
+    max-width: 500px;
+    line-height: 1.5;
+}
+
+.orange-card-frame{
+    background: #d36b2d;
+    max-width: 400px;
+    max-height: 400px;
+    padding: 30px;
+    border-radius: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.image1{
+    border-radius: 30px;
+}
+.content-right{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* --- 6. ANIMATION KEYFRAMES --- */
+@keyframes slideTrackLTR {
+    0%, 20% { transform: translateX(0); }
+    25%, 45% { transform: translateX(-25%); }
+    50%, 70% { transform: translateX(-50%); }
+    75%, 95% { transform: translateX(-75%); }
+    100% { transform: translateX(0); }
+}
+
+
+
+
+.services-container{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    background-color: orange;
+    padding: 40px;
+    gap: 20px;
+    border-radius: 12px;
+    display: grid;
+}
+.section-header{
+    color: var(--off-white);
+    grid-column: 1 / -1; /* Spans the entire grid width */
+    margin-bottom:10px;
+    font-family: sans-serif;
+    font-size: 24px;
+}
+.service-card{
+    background-color: #1a1c20;
+    aspect-ratio: 1 / 1;
+    border-radius: 20px;
+    display: flex;
+    align-items: flex-end;
+   border-radius:8px;
+    
+    padding: 20px;
+}
+
+
+
+
+/* --- Services & Expert Sections (Left Aligned) --- */
+.services-section, .expert-profiles {
+    padding: 100px 5% 100px 2%; /* Matches the Hero padding */
+    text-align: left; /* Ensures headers align left */
+}
+
+.services-container {
+    background: #d36b2d;
+    padding: 50px;
+    border-radius: 50px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    /* Ensures the orange block aligns with the text above */
+    margin-left: 0; 
+}
+
+
+.profile-card {
+    display: flex;
+    background: #111;
+    border-radius: 40px;
+    padding: 40px;
+    gap: 40px;
+    align-items: center;
+    border: 1px solid #222;
+    margin-left: 0;
+}
+
+/* --- Animation Reset --- */
+@keyframes slideTrackLTR {
+    0%, 20% { transform: translateX(0); }
+    25%, 45% { transform: translateX(-25%); }
+    50%, 70% { transform: translateX(-50%); }
+    75%, 95% { transform: translateX(-75%); }
+    100% { transform: translateX(0); }
+}
+
+
+
+
+
+
+
+/* Container styling */
+.services-section {
+  width: 100%;
+  background-color: #d36e35; /* Matching your orange background[cite: 1] */
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.services-container {
+  width: 95%; /* Covers left to right with small margins */
+  max-width: 1400px;
+  text-align: center;
+}
+
+.section-header {
+  color: white;
+  margin-bottom: 30px;
+  font-family: sans-serif;
+  text-transform: uppercase;
+}
+
+/* The Grid: 6 columns for a wide, short look */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); /* 6 cards across[cite: 1] */
+  gap: 15px;
+}
+
+/* Individual Card Styling */
+.service-card {
+  background-color: #1a1c1e; /* Dark cards from your design[cite: 1] */
+  color: white;
+  padding: 20px 10px;
+  border-radius: 12px;
+  height: 180px; /* Forced smaller height for a slim profile */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+}
+
+.service-card .icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.service-card h3 {
+  font-size: 0.85rem;
+  margin: 5px 0;
+  line-height: 1.2;
+}
+
+.service-card p {
+  font-size: 0.75rem;
+  opacity: 0.8;
+  margin: 0;
+  padding: 0 5px;
+}
+
+/* Responsive: Stack them on smaller screens */
+@media (max-width: 1024px) {
+  .services-grid {
+    grid-template-columns: repeat(3, 1fr); /* 3x2 on tablets */
+  }
+}
+
+@media (max-width: 600px) {
+  .services-grid {
+    grid-template-columns: 1fr; /* 1 column on mobile */
+  }
+  .service-card {
+    height: auto;
+    padding: 30px;
+  }
+}
+
+
+
+
+.academy-section {
+  width: 100%;
+  background-color: #0f1113; /* Deep black/navy for "Elite" feel */
+  padding: 80px 0;
+  display: flex;
+  justify-content: center;
+  border-top: 2px solid #d36e35; /* Accent line connecting to your main brand */
+}
+
+.academy-container {
+  width: 90%;
+  max-width: 1200px;
+  text-align: center;
+}
+
+.academy-main-title {
+  color: #ffffff;
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.academy-intro {
+  color: #d36e35;
+  font-weight: 600;
+  margin-bottom: 50px;
+  font-size: 1.1rem;
+}
+
+.academy-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.academy-card {
+  background: linear-gradient(145deg, #1e2023, #16181a);
+  border: 1px solid #333;
+  border-radius: 15px;
+  padding: 40px 25px;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.academy-card:hover {
+  border-color: #d36e35;
+  transform: translateY(-10px);
+  box-shadow: 0 10px 30px rgba(211, 110, 53, 0.2);
+}
+
+.academy-icon {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.academy-card h3 {
+  color: #fff;
+  font-size: 1.25rem;
+  margin-bottom: 15px;
+}
+
+.academy-card p {
+  color: #b0b0b0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+.level-tag {
+  display: inline-block;
+  background-color: rgba(211, 110, 53, 0.1);
+  color: #d36e35;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 900px) {
+  .academy-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+
+
+
+/* --- ---------------------------------------------------Trust Bar Styles --- */
+.trust-bar {
+    background-color: #111;
+    display: flex;
+    justify-content: space-around;
+    padding: 60px 10%;
+    border-top: 1px solid #333;
+    border-bottom: 1px solid #333;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #d36b2d; /* Your signature orange */
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    color: #a0a0a0;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* --- Faculty Section Styles --- */
+.faculty-section {
+    padding: 100px 10%;
+    background-color: #000;
+    text-align: center;
+}
+
+.section-heading {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 60px;
+    text-transform: uppercase;
+}
+
+.expert-profiles {
+    background-color: #050505;
+    padding: 80px 10%;
+    color: white;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 50px;
+    color: #d36b2d; /* Signature Orange */
+    text-transform: uppercase;
+}
+
+.profile-card {
+    display: flex;
+    align-items: center;
+    background: #111;
+    border-radius: 40px; /* Matching the card style from your image */
+    padding: 40px;
+    margin-bottom: 40px;
+    gap: 50px;
+    border: 1px solid #222;
+}
+
+.profile-image {
+    flex: 1;
+    max-width: 300px;
+}
+
+.profile-image img {
+    width: 100%;
+    border-radius: 30px;
+    border: 2px solid #d36b2d;
+    display: block;
+}
+
+.profile-info {
+    flex: 2;
+}
+
+.instructor-name {
+    font-size: 2rem;
+    font-weight: 900;
+    margin-bottom: 5px;
+}
+
+.instructor-role {
+    color: #d36b2d;
+    font-size: 1rem;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+}
+
+.instructor-bio {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #ccc;
+    margin-bottom: 20px;
+}
+
+.instructor-stats {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    border-top: 1px solid #333;
+    padding-top: 20px;
+}
+
+.instructor-stats li {
+    font-size: 0.9rem;
+    color: #a0a0a0;
+}
+
+.instructor-stats strong {
+    color: white;
+    display: block;
+}
+
+/* Responsive for mobile - stacks the image on top of text */
+@media (max-width: 850px) {
+    .profile-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    .instructor-stats {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 768px) {
+    .trust-bar {
+        flex-direction: column;
+        gap: 40px;
+    }
+    .faculty-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/*--------footer---------------------------------------------------------------------------------------------------*/
+:root {
+    --primary-orange: #ff9800;
+    --bg-black: #050505;
+    --text-gray: #b0b0b0;
+}
+
+.site-footer {
+    background-color: var(--bg-black);
+    color: white;
+    padding: 60px 8% 40px;
+    font-family: sans-serif;
+    position: relative;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.footer-col {
+    flex: 1;
+    min-width: 200px;
+}
+
+/* Typography */
+.logo { font-size: 24px; margin-bottom: 5px; }
+.tagline { color: var(--text-gray); font-size: 13px; margin-bottom: 30px; }
+
+.col-title {
+    color: var(--primary-orange);
+    font-size: 18px;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.about-text {
+    color: var(--text-gray);
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+/* Links & Contacts */
+.footer-links { list-style: none; }
+.footer-links li { margin-bottom: 12px; }
+.footer-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s;
+}
+.footer-links a:hover { color: var(--primary-orange); }
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+.icon { color: var(--primary-orange); }
+
+/* Subscription Form */
+.sub-title { font-size: 16px; margin-bottom: 20px; }
+
+.input-group {
+    background: white;
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+.input-group input {
+    border: none;
+    outline: none;
+    width: 100%;
+    margin-left: 10px;
+}
+.mail-icon { color: black; font-size: 14px; }
+
+.sub-btn {
+    background-color: var(--primary-orange);
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    width: fit-content;
+}
+
+/* Back to top button */
+.back-to-top {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: var(--primary-orange);
+    color: white;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 12px;
+}

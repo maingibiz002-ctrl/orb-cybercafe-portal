@@ -1,0 +1,481 @@
+  {% load static %}
+  <!--DOCUMENT SETUP--> 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--tab name-->
+    <title>ORB CYBER CAFE|Where skills meets serenity</title>
+    <!--favicon-->
+   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22black%22/><text y=%22.9em%22 font-size=%2280%22 font-family=%22serif%22 fill=%22%23FF6B00%22 x=%2250%%22 text-anchor=%22middle%22>α</text></svg>">
+    <link rel="stylesheet" href="{% static 'hhh.css' %}">
+    <script src="js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+   
+
+</head>  
+    <!------------------------------------------------------------------------------------------------------------------->
+ <!--BODY STRUCTURE-->
+<body>
+<!--HEADER-->
+  <header class="navbar">
+    <div class="container">
+        <a href="#" class="logo">
+            <span class="symbol">&CircleDot;</span> ORB<span class="highlight">cyber</span>CAFE
+        </a>
+
+        <nav>
+           <div class="menu-toggle" id="mobile-menu">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+</div>
+            <ul class="nav-links">
+                <li class="dropdown">
+                    <a href="#">PIP SCHOOL
+                         ▾</a>
+                    <ul class="submenu">
+                        <li><a href="{% static 'consult-index.html' %}">Strategy Development</a></li>
+                        <li><a href="{% static 'consult-index.html#risk' %}">Risk Management</a></li>
+                        <li><a href="{% static 'consult-index.html#portfolio' %}">Portfolio Construction</a></li>
+                        <li><a href="{% static 'consult-index.html#analytics' %}">Performance Analytics</a></li>
+                        <li><a href="{% static 'consult-index.html#fundamental' %}">Fundamental Analysis</a></li>
+                        <li><a href="{% static 'consult-index.html#psychology' %}">Trading Psychology</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#">Tech services ▾</a>
+                    <ul class="submenu">
+                        <li><a href="{% static 'enroll-index.html' %}">WEB DEVELOPMENT</a></li>
+                        <li><a href="{% static 'enroll-index.html' %}">MOBILE APP DEVELOPMENT</a></li>
+                        <li><a href="{% static 'enroll-index.html' %}">Machine Learning</a></li>
+                        <li><a href="{% static 'enroll-index.html' %}">Backtesting Masterclass</a></li>
+                    </ul> 
+                </li>
+              <li class="dropdown">
+                    <a href="#">Resources ▾</a>
+                    <ul class="submenu">
+                        <li><a href="{%static 'resources-index.html' %}">Blog posts</a></li>
+                        <li><a href="{%static 'resources-index.html#market-clocks' %}">Live Clock</a></li>
+                        <li><a href="{%static 'resources-index.html#glossary' %}">Quant Glossary</a></li>
+                        <li><a href="{%static 'resources-index.html#market-regime' %}">Weekly Market Regime Report</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="nav-cta">
+            
+            <a href="{%static 'login.html' %}" class="btn-primary">Login</a>
+            <a href="{%static 'signup-index.html' %}" class="btn-primary">SIGN UP</a>
+        </div>
+    </div>
+</header>
+
+    <!--------------------------------------------------------------------------------lets get to the body now-------------------------->
+   <body>
+    <!--market data slider-->
+<section class="market-overview">
+    <div class="slider-title">
+       
+    </div>
+    
+    <div class="market-ticker-container">
+        <div class="market-ticker-track">
+            <div class="market-card">
+                <span class="symbol">S&P 500</span>
+                <span class="price">5,241.50</span>
+                <span class="change up">+1.2%</span>
+            </div>
+            <div class="market-card">
+                <span class="symbol">BTC/USD</span>
+                <span class="price">$64,231</span>
+                <span class="change up">+4.5%</span>
+            </div>
+            <div class="market-card">
+                <span class="symbol">GOLD</span>
+                <span class="price">$2,165.20</span>
+                <span class="change down">-0.3%</span>
+            </div>
+            <div class="market-card">
+                <span class="symbol">NASDAQ</span>
+                <span class="price">16,428.80</span>
+                <span class="change up">+0.8%</span>
+            </div>
+            <div class="market-card">
+                <span class="symbol">EUR/USD</span>
+                <span class="price">1.0821</span>
+                <span class="change down">-0.1%</span>
+            </div>
+            <div class="market-card">
+                <span class="symbol">CRUDE OIL</span>
+                <span class="price">$81.30</span>
+                <span class="change up">+2.1%</span>
+            </div>
+
+            <div class="market-card">
+                <span class="symbol">S&P 500</span>
+                <span class="price">5,241.50</span>
+                <span class="change up">+1.2%</span>
+            </div>
+            <div class="market-card">
+                <span class="symbol">BTC/USD</span>
+                <span class="price">$64,231</span>
+                <span class="change up">+4.5%</span>
+            </div>
+            <div class="market-card">
+                <span class="symbol">GOLD</span>
+                <span class="price">$2,165.20</span>
+                <span class="change down">-0.3%</span>
+            </div>
+            <div class="market-card">
+                <span class="symbol">NASDAQ</span>
+                <span class="price">16,428.80</span>
+                <span class="change up">+0.8%</span>
+            </div>
+            <div class="market-card">
+                <span class="symbol">EUR/USD</span>
+                <span class="price">1.0821</span>
+                <span class="change down">-0.1%</span>
+            </div>
+            <div class="market-card">
+                <span class="symbol">CRUDE OIL</span>
+                <span class="price">$81.30</span>
+                <span class="change up">+2.1%</span>
+            </div>
+        </div>
+    </div>
+</section>
+<!---------------------------------background slideshow--------------------------------->
+<section class="hero-slider-section">
+        <div class="carousel-view">
+            <div class="slide-track">
+                
+                <div class="carousel-slide page-1">
+                    <div class="content-overlay">
+                        <div class="content-left">
+                            <h1 class="slide-title">Automate<br>Your<br>Edge.</h1>
+                            <p class="slide-description">{{feature1.details}}</p>
+                        </div>
+                        <div class="content-right">
+                            <div class="orange-card-frame">
+                                <img src="{% static 'background.jpg' %}" alt="Analysis">
+                                <button class="discover-btn">✓ view Tools</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="carousel-slide page-2">
+                    <div class="content-overlay">
+                        <div class="content-left">
+                            <h1 class="slide-title">Expert <br>quality <br>Consultancy.</h1>
+                            <p class="slide-description">{{feature2.details}}</p>
+                        </div>
+                        <div class="content-right">
+                            <div class="orange-card-frame">
+                                <img src="{% static 'consu.jpg' %}" alt="Data">
+                                <button class="discover-btn">✓ Book Appintment</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="carousel-slide page-3">
+                    <div class="content-overlay">
+                        <div class="content-left">
+                            <h1 class="slide-title">Maximize <br>Your<br>portifolio returns.</h1>
+                            <p class="slide-description">{{feature3.details}}</p>
+                        </div>
+                        <div class="content-right">
+                            <div class="orange-card-frame">
+                                <img src="{% static 'return.jpg' %}" alt="Future">
+                                <button class="discover-btn">✓ Join College</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="carousel-slide page-4">
+                    <div class="content-overlay">
+                        <div class="content-left">
+                            <h1 class="slide-title">The<br>Future of <br>Digital Finance.</h1>
+                            <p class="slide-description">{{feature4.details}}</p>
+                        </div>
+                        <div class="content-right">
+                            <div class="orange-card-frame">
+                                <img src="{% static 'background3.jpg' %}" alt="Growth">
+                                <button class="discover-btn">✓ Learn More</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+    
+   <!--section class="services-section">
+  <div class="services-container">
+    <h2 class="section-header">Wise Duke Consultancy Services</h2>
+    <div class="services-grid">
+      
+    
+        <-- Trading Psychology 
+      <div class="service-card">
+        <div class="icon">🧠</div>
+        <h3>{{service.name}}</h3>
+        <p>{{service.details}}</p>
+      </div>-->
+     
+
+
+      <!-- Trading Psychology
+      <div class="service-card">
+        <div class="icon">🧠</div>
+        <h3>{{service1.name}}</h3>
+        <p>{{service1.details}}</p>
+      </div>
+
+      <!-- Trading Strategy 
+      <div class="service-card">
+        <div class="icon">📈</div>
+        <h3>{{service2.name}}</h3>
+        <p>{{service2.details}}</p>
+      </div> -->
+
+      <!-- Risk Management 
+      <div class="service-card">
+        <div class="icon">🛡️</div>
+        <h3>{{service3.name}}</h3>
+        <p>{{service3.details}}</p>
+      </div> -->
+
+      <!-- Fundamental Analysis 
+      <div class="service-card">
+        <div class="icon">📊</div>
+        <h3>{{service4.name}}</h3>
+        <p>{{service4.details}}</p>
+      </div>-->
+
+      <!-- Portfolio Creation 
+      <div class="service-card">
+        <div class="icon">💼</div>
+        <h3>{{service5.name}}</h3>
+        <p>{{service5.details}}</p>
+      </div>  -->
+
+      <!-- Performance Analytics 
+      <div class="service-card">
+        <div class="icon">🔬</div>
+        <h3>{{service6.name}}</h3>
+        <p>{{service6.details}}</p>
+      </div>  -->
+
+    </div> 
+  </div>
+</section>
+
+
+
+
+
+
+
+<section class="academy-section">
+  <div class="academy-container">
+    <h2 class="academy-main-title">Alpha Quant Academy</h2>
+    <p class="academy-intro">The elite training ground for quantitative finance and automated execution.</p>
+    
+    <div class="academy-grid">
+      
+      <div class="academy-card">
+        <div class="academy-icon">🐍</div>
+        <h3>PYTHON FOR FINANCE</h3>
+        <p>Master data manipulation with Pandas, NumPy, and Matplotlib. Learn to automate data retrieval and backtest simple strategies from scratch.</p>
+        <span class="level-tag">Level: Foundation</span>
+      </div>
+
+      <div class="academy-card">
+        <div class="academy-icon">⚙️</div>
+        <h3>ALGORITHMIC TRADING</h3>
+        <p>Build professional-grade EAs using MQL5 and Python. Master multi-timeframe analysis, execution logic, and institutional risk protocols.</p>
+        <span class="level-tag">Level: Intermediate</span>
+      </div>
+
+      <div class="academy-card">
+        <div class="academy-icon">🤖</div>
+        <h3>ML IN FINANCE</h3>
+        <p>Deploy XGBoost, LSTMs, and Neural Networks for market prediction. Learn feature engineering and model optimization for real-world alpha.</p>
+        <span class="level-tag">Level: Advanced</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+<section class="trust-bar">
+    <div class="stat-item">
+        <span class="stat-number">500+</span>
+        <span class="stat-label">ALGORITHMS BUILT</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-number">98%</span>
+        <span class="stat-label">FINANCIAL LITERACY RATE</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-number">15+</span>
+        <span class="stat-label">INSTITUTIONAL PARTNERS</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-number">24/7</span>
+        <span class="stat-label">TRADING COMMUNITY</span>
+    </div>
+</section>
+
+<section class="expert-profiles">
+    <h2 class="section-title">Lead Instructors</h2>
+    
+    <div class="profile-card">
+        <div class="profile-image">
+            <img src="{% static 'wisedukepassport.jpg' %}" alt="Lead Instructor">
+        </div>
+        <div class="profile-info">
+            <h3 class="instructor-name">Wiseduke</h3>
+            <h4 class="instructor-role">Director of Quantitative Strategy</h4>
+            <p class="instructor-bio">
+                With over 15 years of experience in high-frequency trading and 
+                algorithmic development, Wiseduke leads our "Engineering Your Edge" 
+                initiative. Formerly a Lead Quant at a top-tier hedge fund, 
+                he specializes in teaching students how to turn complex market 
+                data into actionable, institutional-grade strategies.
+            </p>
+            <ul class="instructor-stats">
+                <li><strong>Specialty:</strong> Machine Learning in Investment</li>
+                <li><strong>Expertise:</strong> Performance Analytics</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+</body>
+  
+    
+    <!------------------------------footer starts here---------------------->
+<footer class="site-footer">
+    <div class="footer-container">
+        <!-- Column 1: Brand & Contact -->
+        <div class="footer-col">
+            <h2   class="symbol">&beta;</span> FIN<span class="highlight">College</span>
+        </a></h2>
+            <p class="tagline">Financial Literacy & Wealth Education</p>
+            
+            
+            
+            <h3 class="col-title">About Us</h3>
+            <p class="about-text">Where skills meets serenity.</p>
+            
+            <h3 class="col-title">Contact Us</h3>
+            <div class="contact-item">
+                <span class="icon">📞</span>
+                <span>+254 743-634-717</span>
+            </div>
+            <div class="contact-item">
+                <span class="icon">✉️</span>
+                <span>evansofficial005@gmail.com</span>
+            </div>
+        </div>
+
+        <!-- Column 2: Information -->
+        <div class="footer-col">
+            <h3 class="col-title">Information</h3>
+            <ul class="footer-links">
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">More Search</a></li>
+                <li><a href="#">Blog</a></li>
+                <li><a href="#">Testimonials</a></li>
+                <li><a href="#">Events</a></li>
+            </ul>
+        </div>
+
+        <!-- Column 3: Helpful Links -->
+        <div class="footer-col">
+            <h3 class="col-title">Helpful Links</h3>
+            <ul class="footer-links">
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Supports</a></li>
+                <li><a href="#">Terms & Condition</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+            </ul>
+        </div>
+
+        <!-- Column 4: Subscription -->
+        <div class="footer-col">
+            <h3 class="sub-title">Subscribe More Info</h3>
+            <div class="subscribe-form">
+                <div class="input-group">
+                    <span class="mail-icon">✉️</span>
+                    <input type="email" placeholder="Enter your Email">
+                </div>
+                <button class="sub-btn">Subscribe</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Back to top arrow -->
+    <a href="#" class="back-to-top">▲</a>
+</footer> 
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script>
+    // Check if the URL says "?status=success"
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('status') === 'success') {
+        alert("Welcome to the Academy! Please check your email to confirm.");
+    }
+
+    // Check if a user is already logged in
+    async function getSession() {
+        const { data: { session } } = await _supabase.auth.getSession();
+        if (session) {
+            console.log("User is logged in as:", session.user.email);
+            // You can use your #D36E35 color to highlight a "Logout" button here
+        }
+    }
+    getSession();
+
+async function updateUI() {
+    const { data: { user } } = await _supabase.auth.getUser();
+
+    if (user) {
+        // User is logged in
+        document.querySelector('#auth-status').innerHTML = `
+            <span>Logged in as: ${user.email}</span>
+            <button onclick="handleLogout()" style="color: #D36E35;">Logout</button>
+        `;
+    }
+}
+
+async function handleLogout() {
+    await _supabase.auth.signOut();
+    window.location.reload(); // Refresh to show the logged-out state
+}
+
+updateUI();
+</script>
+</body>
+</html>
