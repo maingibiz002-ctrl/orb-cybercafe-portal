@@ -29,6 +29,22 @@
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 
+                <!-- Display System Error Messages -->
+                {% if error %}
+                <div class="alert alert-danger alert-dismissible fade show mb-4 shadow-sm" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ error }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endif %}
+
+                <!-- Display Payment Success Messages -->
+                {% if success_message %}
+                <div class="alert alert-success alert-dismissible fade show mb-4 shadow-sm" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i>{{ success_message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endif %}
+                
                 <h3 class="mb-4 fw-semibold text-dark"><i class="bi bi-grid-3x3-gap me-2 text-primary"></i>Available Packages</h3>
                 
                 <div class="row row-cols-1 row-cols-md-3 g-4">
@@ -48,7 +64,7 @@
                                     <i class="bi bi-clock-history me-1"></i> Valid for <strong>{{ package.duration }}</strong> of continuous high-speed browsing.
                                 </p>
 
-                                <!-- Button triggers M-Pesa Modal with data attributes -->
+                                <!-- Button triggers Payment Modal with data attributes -->
                                 <button type="button" 
                                         class="btn btn-pay w-100 py-2 mt-3" 
                                         data-bs-toggle="modal" 
@@ -76,7 +92,7 @@
         </div>
     </div>
 
-    <!-- M-Pesa Payment Modal -->
+    <!-- Payment Modal -->
     <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg" style="border-radius: 16px;">
@@ -85,15 +101,19 @@
                 </div>
                 <div class="modal-body px-4 pb-4">
                     <div class="text-center mb-4">
-                        <i class="bi bi-phone-vibrate fs-1 mpesa-color"></i>
-                        <h4 class="modal-title fw-bold mt-2" id="paymentModalLabel">Lipa na <span class="mpesa-color">M-PESA</span></h4>
-                        <p class="text-muted">An STK push will be sent directly to your phone.</p>
+                        <i class="bi bi-credit-card-2-front fs-1 text-primary"></i>
+                        <h4 class="modal-title fw-bold mt-2" id="paymentModalLabel">Complete Payment</h4>
+                        <p class="text-muted">You will be redirected to complete your payment securely via Paystack.</p>
                     </div>
 
-                    <form id="paymentForm" method="POST" action="">
+                    <!-- FIXED: Points to guest_portal view explicitly -->
+                    <form id="paymentForm" method="POST" action="{% url 'guest_portal' %}">
                         {% csrf_token %}
-                        <!-- Hidden input to store chosen package ID -->
+                        
+                        <!-- Hidden inputs to preserve Package ID and Router Tracking -->
                         <input type="hidden" name="package_id" id="modal-package-id">
+                        <input type="hidden" name="mac_address" value="{{ router_mac }}">
+                        <input type="hidden" name="ip_address" value="{{ router_ip }}">
 
                         <div class="mb-3">
                             <label class="form-label text-muted fw-semibold">Selected Package</label>
@@ -117,11 +137,11 @@
                                        pattern="[0-9]{9}" 
                                        required>
                             </div>
-                            <div class="form-text text-muted">Enter your number starting with 7 or 1 (e.g. 712345678)</div>
+                            <div class="form-text text-muted">Enter your line starting with 7 or 1 (e.g. 712345678)</div>
                         </div>
 
-                        <button type="submit" class="btn btn-success w-100 py-3 fw-bold border-0" style="background-color: #1ebd1e;">
-                            Send STK Push
+                        <button type="submit" class="btn btn-primary w-100 py-3 fw-bold border-0">
+                            Proceed to Checkout
                         </button>
                     </form>
                 </div>

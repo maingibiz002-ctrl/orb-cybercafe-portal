@@ -63,6 +63,7 @@ def guest_portal(request):
     packages = Package.objects.all().order_by('price')
     paystack = PaystackGateway()
     
+    # Extract router tracking parameters from GET or POST
     router_mac = request.GET.get('mac', request.POST.get('mac_address', ''))
     router_ip = request.GET.get('ip', request.POST.get('ip_address', ''))
     
@@ -72,25 +73,35 @@ def guest_portal(request):
         
         cleaned_phone = "".join(c for c in phone_number if c.isdigit())
         
+        # Preserve context in case of error return
+        context = {
+            'packages': packages,
+            'router_mac': router_mac,
+            'router_ip': router_ip
+        }
+        
         if not cleaned_phone:
-            return render(request, 'index.html', {'packages': packages, 'error': 'Please provide a valid phone number.'})
+            context['error'] = 'Please provide a valid phone number.'
+            return render(request, 'index.html', context)
             
         try:
             package = Package.objects.get(id=package_id)
         except Package.DoesNotExist:
-            return render(request, 'index.html', {'packages': packages, 'error': 'Selected package does not exist.'})
+            context['error'] = 'Selected package does not exist.'
+            return render(request, 'index.html', context)
             
         dummy_email = f"customer_{cleaned_phone}@orbcybercafe.com"
-        
-        # 1. UPDATED: Point directly to live Render callback domain
         callback_url = "https://orb-cybercafe-portal.onrender.com/paystack/callback/"
         
         metadata = {
             "phone_number": cleaned_phone,
-            "package_id": package.id
+            "package_id": package.id,
+            "mac_address": router_mac,
+            "ip_address": router_ip
         }
         
         print(f"\n[CHECKOUT INITIALIZATION] Processing request for phone: {cleaned_phone}")
+        
         response = paystack.initialize_transaction(
             email=dummy_email,
             amount_in_kes=package.price,
@@ -98,12 +109,13 @@ def guest_portal(request):
             metadata=metadata
         )
         
-        if response.get('status') is True:
+        if response and response.get('status') is True:
             reference = response['data']['reference']
             authorization_url = response['data']['authorization_url']
             
             print(f"--> Paystack session created. Ref: {reference} | Captured Hardware: {router_mac}")
             
+            # Record pending transaction
             Transaction.objects.create(
                 mpesa_checkout_id=reference, 
                 phone_number=cleaned_phone,
@@ -113,18 +125,22 @@ def guest_portal(request):
                 ip_address=router_ip,
                 status='PENDING'
             )
-            print(f"--> Pending transaction entry recorded in local database. Redirecting user...")
+            
+            print(f"--> Pending transaction entry recorded in local database. Redirecting user to Paystack...")
+            
+            # Redirect user's browser to Paystack checkout screen
             return redirect(authorization_url)
         else:
-            print(f"--> Paystack Initialization Failure: {response.get('message')}")
-            return render(request, 'index.html', {'packages': packages, 'error': response.get('message', 'Gateway initiation failed.')})
+            error_msg = response.get('message', 'Gateway initiation failed.') if response else 'Unable to reach payment gateway.'
+            print(f"--> Paystack Initialization Failure: {error_msg}")
+            context['error'] = error_msg
+            return render(request, 'index.html', context)
             
     return render(request, 'index.html', {
         'packages': packages,
         'router_mac': router_mac,
         'router_ip': router_ip
     })
-
 
 @csrf_exempt
 
