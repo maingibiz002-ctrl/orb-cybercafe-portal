@@ -114,3 +114,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Paystack Domain Configurations
+PAYSTACK_CALLBACK_URL = 'https://orb-cybercafe-portal.onrender.com/paystack/callback/'
+PAYSTACK_WEBHOOK_URL = 'https://orb-cybercafe-portal.onrender.com/paystack/webhook/'
