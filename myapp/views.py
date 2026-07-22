@@ -63,8 +63,6 @@ def guest_portal(request):
     packages = Package.objects.all().order_by('price')
     paystack = PaystackGateway()
     
-    # 👇 1. CAPTURE NETWORK DETAILS FROM URL (GET parameters sent by MikroTik/Gateway)
-    # Different routers use different names: MikroTik standard is 'mac' and 'ip'
     router_mac = request.GET.get('mac', request.POST.get('mac_address', ''))
     router_ip = request.GET.get('ip', request.POST.get('ip_address', ''))
     
@@ -83,7 +81,9 @@ def guest_portal(request):
             return render(request, 'index.html', {'packages': packages, 'error': 'Selected package does not exist.'})
             
         dummy_email = f"customer_{cleaned_phone}@orbcybercafe.com"
-        callback_url = "https://onshore-sterile-antics.ngrok-free.dev/paystack/callback/"
+        
+        # 1. UPDATED: Point directly to live Render callback domain
+        callback_url = "https://orb-cybercafe-portal.onrender.com/paystack/callback/"
         
         metadata = {
             "phone_number": cleaned_phone,
@@ -104,14 +104,13 @@ def guest_portal(request):
             
             print(f"--> Paystack session created. Ref: {reference} | Captured Hardware: {router_mac}")
             
-            # 👇 2. STORE HARDWARE SIGNATURES IN PENDING TRACKER ENTRY
             Transaction.objects.create(
                 mpesa_checkout_id=reference, 
                 phone_number=cleaned_phone,
                 package=package,
                 amount=package.price,
-                mac_address=router_mac,  # Save the MAC address here
-                ip_address=router_ip,    # Save the IP address here
+                mac_address=router_mac,
+                ip_address=router_ip,
                 status='PENDING'
             )
             print(f"--> Pending transaction entry recorded in local database. Redirecting user...")
@@ -120,7 +119,6 @@ def guest_portal(request):
             print(f"--> Paystack Initialization Failure: {response.get('message')}")
             return render(request, 'index.html', {'packages': packages, 'error': response.get('message', 'Gateway initiation failed.')})
             
-    # For initial GET page view request, pass captured router variables down to hidden inputs in template
     return render(request, 'index.html', {
         'packages': packages,
         'router_mac': router_mac,
@@ -132,54 +130,50 @@ def guest_portal(request):
 def paystack_callback(request):
     paystack = PaystackGateway()
     
+    # Extract reference whether request is POST (Webhook) or GET (Browser Redirect)
     if request.method == 'POST':
-        print("\n[WEBHOOK RECEIVED] Incoming live payload event dropped from Paystack...")
         try:
             payload = json.loads(request.body.decode('utf-8'))
-            event_type = payload.get('event')
-            print(f"--> Webhook Event Type Identified: {event_type}")
+            reference = payload.get('data', {}).get('reference')
+        except Exception:
+            reference = None
+    else:
+        reference = request.GET.get('reference')
+
+    if reference:
+        print(f"\n[PROCESSING PAYMENT] Reference: {reference} (Method: {request.method})")
+        verified_data = paystack.verify_transaction(reference)
+        
+        if verified_data and verified_data.get('status') == 'success':
+            verified_amount = float(verified_data.get('amount', 0)) / 100
             
-            if event_type == 'charge.success':
-                reference = payload['data']['reference']
-                print(f"--> Extracting unique session reference key: {reference}")
+            try:
+                transaction = Transaction.objects.get(mpesa_checkout_id=reference)
                 
-                print("--> Executing secondary verification handshake directly with Paystack API...")
-                verified_data = paystack.verify_transaction(reference)
-                
-                if verified_data and verified_data.get('status') == 'success':
-                    verified_amount = verified_data.get('amount') / 100
-                    print(f"--> Handshake verified clear. Confirmed Payment Amount: KES {verified_amount}")
-                    
-                    try:
-                        transaction = Transaction.objects.get(mpesa_checkout_id=reference)
-                        print(f"--> Found tracking profile entry for Transaction ID: {transaction.id} (Current status: {transaction.status})")
+                if transaction.status == 'PENDING':
+                    # Safe numeric comparison
+                    if abs(float(transaction.amount) - verified_amount) < 0.01:
+                        transaction.status = 'COMPLETED'
+                        transaction.mpesa_receipt_code = reference 
+                        transaction.save()
+                        print(f"✅ [SUCCESS] Transaction {reference} updated to COMPLETED!")
                         
-                        if transaction.status == 'PENDING':
-                            if float(transaction.amount) == float(verified_amount):
-                                print("--> Integrity check passed. Updating transaction status to COMPLETED...")
-                                transaction.status = 'COMPLETED'
-                                transaction.mpesa_receipt_code = reference 
-                                transaction.save()
-                                print("[DATABASE SUCCESS] Transaction status locked to COMPLETED.")
-                                
-                                # Boot network access routines (It will now safely extract the saved MAC inside)
-                                authorize_internet_access(transaction)
-                            else:
-                                print(f"[SECURITY WARNING] Fraud block: Expected KES {transaction.amount}, but user paid KES {verified_amount}.")
-                        else:
-                            print(f"--> [NOTICE] Webhook ignored. Transaction reference {reference} was already handled earlier.")
-                            
-                    except Transaction.DoesNotExist:
-                        print(f"[DATABASE ERROR] Reference tracker token {reference} cannot be found matching local system entries.")
+                        # Authorize router access
+                        authorize_internet_access(transaction)
+                    else:
+                        print(f"⚠️ [WARNING] Amount mismatch! Expected KES {transaction.amount}, got KES {verified_amount}")
                 else:
-                    print("[API FAILURE] Secure back-channel confirmation verification returned invalid or unpaid.")
-                        
-            return JsonResponse({"status": "processed"}, status=200)
-        except Exception as e:
-            print(f"[FATAL EXCEPTION] Hook processing error or system crash: {str(e)}")
-            return JsonResponse({"status": "failed"}, status=400)
-            
-    # Browser Redirect Fallback (GET)
-    reference = request.GET.get('reference')
-    print(f"\n[BROWSER REDIRECT] User returned to portal landing page. Reference: {reference}")
-    return render(request, 'index.html', {'success_message': f'Payment successfully confirmed! Reference: {reference}'})
+                    print(f"ℹ️ [NOTICE] Transaction {reference} was already completed.")
+            except Transaction.DoesNotExist:
+                print(f"❌ [ERROR] Reference {reference} not found in database.")
+
+    # Return JSON for Webhook POST requests
+    if request.method == 'POST':
+        return JsonResponse({"status": "processed"}, status=200)
+
+    # Return rendered UI page for GET browser redirects
+    packages = Package.objects.all().order_by('price')
+    return render(request, 'index.html', {
+        'packages': packages,
+        'success_message': f'Payment successfully confirmed! Reference: {reference}'
+    })
