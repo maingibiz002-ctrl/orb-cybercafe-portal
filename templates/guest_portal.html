@@ -82,48 +82,61 @@
 </main>
 
 <!-- Payment Modal -->
-<div class="modal fade dark-modal" id="paymentModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="paystackModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header border-0 pb-0">
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        <div class="modal-content bg-dark text-light border border-secondary shadow-lg">
+            
+            <div class="modal-header border-bottom border-secondary">
+                <h5 class="modal-title fw-bold text-white d-flex align-items-center gap-2">
+                    <i class="bi bi-credit-card-fill text-warning"></i> Pay with Paystack
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body px-4 pb-4">
-                <div class="text-center mb-4">
-                    <i class="bi bi-phone-vibrate text-warning display-4"></i>
-                    <h4 class="fw-bold mt-2">M-Pesa Payment</h4>
-                    <p class="text-muted small">Enter your phone number to receive the prompt</p>
-                </div>
 
-                <form method="POST" action="{% url 'guest_portal' %}">
-                    {% csrf_token %}
-                    <input type="hidden" name="package_id" id="modal-package-id">
+            <form method="POST" action="{% url 'guest_portal' %}">
+                {% csrf_token %}
+                <div class="modal-body p-4">
+                    
+                    <input type="hidden" name="package_id" id="modal_package_id">
                     <input type="hidden" name="mac_address" value="{{ router_mac }}">
                     <input type="hidden" name="ip_address" value="{{ router_ip }}">
 
+                    <!-- Selected Package Info (Visible) -->
                     <div class="mb-3">
-                        <label class="form-label text-muted small fw-bold">Selected Package</label>
-                        <input type="text" class="form-control dark-input fw-bold" id="modal-package-display" readonly>
+                        <label class="form-label text-warning small fw-bold text-uppercase">Selected Package</label>
+                        <input type="text" id="modal_package_name" class="form-control bg-secondary bg-opacity-25 text-white border-secondary" readonly>
                     </div>
 
+                    <!-- Amount Info (Visible) -->
                     <div class="mb-3">
-                        <label class="form-label text-muted small fw-bold">Amount</label>
-                        <input type="text" class="form-control dark-input text-warning fw-bold" id="modal-price-display" readonly>
+                        <label class="form-label text-warning small fw-bold text-uppercase">Amount (KES)</label>
+                        <input type="text" id="modal_package_price" class="form-control bg-secondary bg-opacity-25 text-white border-secondary" readonly>
                     </div>
 
-                    <div class="mb-4">
-                        <label for="phoneNumber" class="form-label text-muted small fw-bold">M-Pesa Phone Number</label>
+                    <!-- Customer Phone Number -->
+                    <div class="mb-3">
+                        <label for="phone_number" class="form-label text-white small fw-bold">M-Pesa / Phone Number</label>
                         <div class="input-group">
-                            <span class="input-group-text dark-input text-muted border-end-0">+254</span>
-                            <input type="tel" class="form-control dark-input border-start-0" id="phoneNumber" name="phone_number" placeholder="712345678" pattern="[0-9]{9}" required>
+                            <span class="input-group-text bg-secondary text-white border-secondary">+254</span>
+                            <input type="text" name="phone_number" id="phone_number" class="form-control bg-dark text-white border-secondary" placeholder="712345678" required>
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-select-pay w-100 py-3">
-                        Send M-Pesa Prompt
+                    <!-- Customer Email (Paystack Requirement) -->
+                    <div class="mb-3">
+                        <label for="email" class="form-label text-white small fw-bold">Email Address</label>
+                        <input type="email" name="email" id="email" class="form-control bg-dark text-white border-secondary" placeholder="customer@example.com" value="guest@orbcybercafe.com" required>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer border-top border-secondary">
+                    <button type="submit" class="btn btn-warning w-100 fw-bold py-2">
+                        Proceed to Paystack Payment
                     </button>
-                </form>
-            </div>
+                </div>
+            </form>
+
         </div>
     </div>
 </div>

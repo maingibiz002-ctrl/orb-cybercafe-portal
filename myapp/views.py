@@ -13,63 +13,86 @@ def home_view(request):
 
 
 def guest_portal_view(request):
-    """Renders the Wi-Fi captive portal and processes Paystack/M-Pesa payment attempts."""
     packages = Package.objects.all()
-    
-    # Capture router client details passed via URL query parameters
     router_mac = request.GET.get('mac', '')
     router_ip = request.GET.get('ip', '')
 
-    error_message = None
-    success_message = None
-
     if request.method == 'POST':
         package_id = request.POST.get('package_id')
-        phone_number = request.POST.get('phone_number')
+        email = request.POST.get('email', 'customer@orbcybercafe.com')  # Paystack requires an email
+        phone_number = request.POST.get('phone_number', '').strip()
         mac_address = request.POST.get('mac_address') or router_mac
         ip_address = request.POST.get('ip_address') or router_ip
 
         try:
             package = Package.objects.get(id=package_id)
+
+            # Standardize phone number format
+            if phone_number.startswith('0'):
+                clean_phone = '254' + phone_number[1:]
+            elif not phone_number.startswith('254'):
+                clean_phone = '254' + phone_number
+            else:
+                clean_phone = phone_number
+
+            # Paystack expects amount in sub-units (e.g. KES 10.00 = 1000)
+            amount_in_cents = int(package.price * 100)
+
+            # Paystack API Initialization Payload
+            paystack_url = "https://api.paystack.co/transaction/initialize"
+            headers = {
+                "Authorization": f"Bearer {settings.PAYSTACK_SECRET_KEY}",
+                "Content-Type": "application/json"
+            }
             
-            # Format phone number to standard format
-            clean_phone = phone_number.strip()
-            if clean_phone.startswith('0'):
-                clean_phone = '254' + clean_phone[1:]
-            elif not clean_phone.startswith('254'):
-                clean_phone = '254' + clean_phone
+            # Construct Callback URL dynamically
+            callback_url = request.build_absolute_uri('/paystack/callback/')
 
-            # Generate a unique checkout reference for Paystack
-            checkout_ref = f"REF-{uuid.uuid4().hex[:12].upper()}"
+            payload = {
+                "email": email,
+                "amount": amount_in_cents,
+                "currency": "KES",
+                "callback_url": callback_url,
+                "metadata": {
+                    "phone_number": clean_phone,
+                    "mac_address": mac_address,
+                    "ip_address": ip_address,
+                    "package_id": package.id
+                }
+            }
 
-            # Create the transaction record matching your Transaction model
-            transaction = Transaction.objects.create(
-                phone_number=clean_phone,
-                amount=package.price,
-                package=package,
-                mpesa_checkout_id=checkout_ref,
-                mac_address=mac_address,
-                ip_address=ip_address,
-                status='PENDING'
-            )
+            # Call Paystack API
+            response = requests.post(paystack_url, json=payload, headers=headers)
+            res_data = response.json()
 
-            # TODO: Trigger Paystack / M-Pesa API payload using transaction.mpesa_checkout_id
-
-            success_message = f"Payment prompt initiated for {clean_phone}. Check your phone to complete payment."
+            if res_data.get('status'):
+                # Save pending transaction with Paystack reference
+                reference = res_data['data']['reference']
+                Transaction.objects.create(
+                    phone_number=clean_phone,
+                    amount=package.price,
+                    package=package,
+                    mpesa_checkout_id=reference,
+                    mac_address=mac_address,
+                    ip_address=ip_address,
+                    status='PENDING'
+                )
+                
+                # REDIRECT directly to Paystack payment gateway
+                return redirect(res_data['data']['authorization_url'])
+            else:
+                messages.error(request, "Failed to initialize Paystack transaction. Try again.")
 
         except Package.DoesNotExist:
-            error_message = "Selected package is invalid. Please try again."
+            messages.error(request, "Selected package is invalid.")
         except Exception as e:
-            error_message = "An error occurred initiating payment. Please try again."
+            messages.error(request, f"Error initializing payment: {str(e)}")
 
     return render(request, 'guest_portal.html', {
         'packages': packages,
         'router_mac': router_mac,
-        'router_ip': router_ip,
-        'error': error_message,
-        'success': success_message
+        'router_ip': router_ip
     })
-
 
 def solutions_view(request):
     """Placeholder view for Digital Solutions."""
