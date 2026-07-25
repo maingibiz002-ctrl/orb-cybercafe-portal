@@ -83,11 +83,36 @@ def courses_view(request):
 
 def paystack_callback(request):
     """
-    Handles the user redirect after completing/canceling payment on Paystack.
+    Handles the user redirect after completing payment on Paystack.
     """
-    reference = request.GET.get('reference')
-    # TODO: Verify transaction with Paystack API using the reference
-    return HttpResponse(f"Paystack payment callback received. Reference: {reference}")
+    reference = request.GET.get('reference') or request.GET.get('trxref')
+
+    if reference:
+        try:
+            # Look up transaction by checkout ID or reference
+            transaction = Transaction.objects.filter(mpesa_checkout_id=reference).first()
+            
+            if transaction:
+                transaction.status = 'COMPLETED'
+                transaction.save()
+                
+                # Create an active Wi-Fi session if needed
+                ActiveSession.objects.get_or_create(
+                    mac_address=transaction.mac_address,
+                    defaults={'ip_address': transaction.ip_address}
+                )
+
+                messages.success(request, f"Payment successfully confirmed! Reference: {reference}")
+            else:
+                messages.success(request, f"Payment processed successfully! Reference: {reference}")
+
+        except Exception as e:
+            messages.warning(request, f"Payment received, but session update failed: {str(e)}")
+    else:
+        messages.error(request, "Invalid payment callback reference.")
+
+    # Redirect user back to the Wi-Fi package page instead of raw text
+    return redirect('guest_portal')
 
 
 @csrf_exempt
@@ -99,3 +124,4 @@ def paystack_webhook(request):
         # TODO: Verify Paystack signature header and process payment status
         return JsonResponse({'status': 'success'}, status=200)
     return HttpResponse(status=400)
+
