@@ -1,0 +1,116 @@
+/* Light Background for Content Area */
+body {
+    background-color: #f4f5f7 !important;
+    color: #1a1a1a;
+}
+
+/* Curved Header Banner */
+.portal-header {
+    background-color: #121212;
+    border-bottom: 4px solid #ff5500;
+    border-radius: 0 0 24px 24px;
+    padding: 2.5rem 1rem 2rem 1rem;
+    color: #ffffff;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.portal-header .brand-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+.portal-header .wifi-icon {
+    color: #ff5500;
+}
+
+.portal-header p {
+    color: #b0b0b0;
+    font-size: 0.95rem;
+}
+
+/* Section Title */
+.section-title {
+    color: #0f172a;
+    font-weight: 700;
+    font-size: 1.35rem;
+}
+
+.title-icon {
+    color: #ff5500;
+    font-size: 1.2rem;
+}
+
+/* White Package Cards */
+.pkg-card {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.pkg-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    border-color: #ff5500;
+}
+
+.pkg-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0.75rem;
+}
+
+.pkg-divider {
+    border-top: 1px solid #e2e8f0;
+    margin-bottom: 1.25rem;
+}
+
+.pkg-price {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #ff5500;
+}
+
+.pkg-info {
+    color: #64748b;
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+/* Orange Action Button */
+.btn-select-pay {
+    background-color: #ff5500;
+    color: #ffffff;
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    padding: 0.65rem 1rem;
+    transition: background-color 0.2s ease;
+}
+
+.btn-select-pay:hover {
+    background-color: #e04b00;
+    color: #ffffff;
+}
+
+/* Dark Payment Modal */
+.dark-modal .modal-content {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #333;
+}
+
+.dark-input {
+    background-color: #121212 !important;
+    border: 1px solid #333333 !important;
+    color: #ffffff !important;
+}
+
+.dark-input:focus {
+    border-color: #ff5500 !important;
+    box-shadow: none;
+}

@@ -1,0 +1,47 @@
+/* ==========================================
+   FOOTER STYLES
+   ========================================== */
+.site-footer {
+    background-color: #0f0f0f !important;
+}
+
+.footer-links a {
+    color: #94a3b8;
+    text-decoration: none;
+    transition: color 0.2s ease, padding-left 0.2s ease;
+}
+
+.footer-links a:hover {
+    color: #ff6600;
+    padding-left: 4px;
+}
+
+.footer-social-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ff6600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.footer-social-icon:hover {
+    background-color: #ff6600;
+    color: #ffffff;
+    border-color: #ff6600;
+    transform: translateY(-2px);
+}
+
+.extra-small {
+    font-size: 0.8rem;
+}
+
+.fs-7 {
+    font-size: 0.825rem;
+    letter-spacing: 0.5px;
+}

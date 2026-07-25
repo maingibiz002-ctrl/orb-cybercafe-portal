@@ -1,0 +1,115 @@
+/* Ensure page body below hero is light grey */
+body {
+    background-color: #f4f5f7 !important;
+    color: #1a1a1a;
+}
+
+/* Curved Header Banner */
+.home-hero {
+    padding-top: 100px;
+    padding-bottom: 60px;
+    background: #121212;
+    border-bottom: 4px solid #ff6600;
+    border-radius: 0 0 24px 24px;
+    color: #ffffff;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.home-hero .brand-title {
+    font-size: 2.4rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+.home-hero .hero-subtitle {
+    color: #b0b0b0;
+    font-size: 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Hero Action Buttons */
+.btn-orange-hero {
+    background-color: #ff6600 !important;
+    color: #ffffff !important;
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    padding: 0.65rem 1.5rem;
+    transition: background-color 0.2s ease;
+}
+
+.btn-orange-hero:hover {
+    background-color: #e05500 !important;
+    color: #ffffff !important;
+}
+
+.btn-outline-hero {
+    border: 2px solid #ff6600 !important;
+    color: #ff6600 !important;
+    font-weight: 700;
+    border-radius: 8px;
+    padding: 0.6rem 1.5rem;
+    background: transparent;
+    transition: all 0.2s ease;
+}
+
+.btn-outline-hero:hover {
+    background-color: #ff6600 !important;
+    color: #ffffff !important;
+}
+
+/* White Service Cards */
+.service-card {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    border-color: #ff6600;
+}
+
+.service-icon-wrapper {
+    width: 48px;
+    height: 48px;
+    background-color: rgba(255, 102, 0, 0.12);
+    color: #ff6600;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+}
+
+.service-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.service-desc {
+    color: #64748b;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+.service-link {
+    color: #ff6600;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.service-link:hover {
+    color: #e05500;
+}
+/* Map container tweak */
+.min-vh-300 {
+    min-height: 380px;
+}
