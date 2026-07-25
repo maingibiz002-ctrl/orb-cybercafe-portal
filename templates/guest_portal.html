@@ -59,10 +59,11 @@
                         Valid for {{ package.duration_hours }} Hour{% if package.duration_hours > 1 %}s{% endif %} of continuous high-speed browsing.
                     </p>
 
+                    <!-- FIX 1: Pointing to #paystackModal -->
                     <button type="button" 
                             class="btn btn-select-pay w-100" 
                             data-bs-toggle="modal" 
-                            data-bs-target="#paymentModal"
+                            data-bs-target="#paystackModal"
                             onclick="setModalData('{{ package.id }}', '{{ package.name }}', '{{ package.price }}')">
                         Select & Pay
                     </button>
@@ -101,13 +102,13 @@
                     <input type="hidden" name="mac_address" value="{{ router_mac }}">
                     <input type="hidden" name="ip_address" value="{{ router_ip }}">
 
-                    <!-- Selected Package Info (Visible) -->
+                    <!-- Selected Package Info -->
                     <div class="mb-3">
                         <label class="form-label text-warning small fw-bold text-uppercase">Selected Package</label>
                         <input type="text" id="modal_package_name" class="form-control bg-secondary bg-opacity-25 text-white border-secondary" readonly>
                     </div>
 
-                    <!-- Amount Info (Visible) -->
+                    <!-- Amount Info -->
                     <div class="mb-3">
                         <label class="form-label text-warning small fw-bold text-uppercase">Amount (KES)</label>
                         <input type="text" id="modal_package_price" class="form-control bg-secondary bg-opacity-25 text-white border-secondary" readonly>
@@ -142,12 +143,23 @@
 </div>
 {% endblock %}
 
+{% block extra_js %}
+<!-- FIX 2: Correct ID matching for JS -->
+<script>
+function setModalData(id, name, price) {
+    document.getElementById('modal_package_id').value = id;
+    document.getElementById('modal_package_name').value = name;
+    document.getElementById('modal_package_price').value = 'Ksh. ' + price;
+}
+</script>
+{% endblock %}
+
 {% block scripts %}
 <script>
 function setModalData(id, name, price) {
-    document.getElementById('modal-package-id').value = id;
-    document.getElementById('modal-package-display').value = name;
-    document.getElementById('modal-price-display').value = 'Ksh. ' + price;
+    document.getElementById('modal_package_id').value = id;
+    document.getElementById('modal_package_name').value = name;
+    document.getElementById('modal_package_price').value = 'Ksh. ' + price;
 }
 </script>
 {% endblock %}
