@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.utils import timezone
 from .models import Package, Transaction, ActiveSession
 from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
 
 def home_view(request):
     """Renders the personal homepage with services."""
