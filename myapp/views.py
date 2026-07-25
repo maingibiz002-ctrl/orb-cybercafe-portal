@@ -19,7 +19,7 @@ def guest_portal_view(request):
 
     if request.method == 'POST':
         package_id = request.POST.get('package_id')
-        email = request.POST.get('email', 'customer@orbcybercafe.com')  # Paystack requires an email
+        email = request.POST.get('email', 'guest@orbcybercafe.com')
         phone_number = request.POST.get('phone_number', '').strip()
         mac_address = request.POST.get('mac_address') or router_mac
         ip_address = request.POST.get('ip_address') or router_ip
@@ -27,7 +27,7 @@ def guest_portal_view(request):
         try:
             package = Package.objects.get(id=package_id)
 
-            # Standardize phone number format
+            # Format phone number to standard format
             if phone_number.startswith('0'):
                 clean_phone = '254' + phone_number[1:]
             elif not phone_number.startswith('254'):
@@ -35,17 +35,18 @@ def guest_portal_view(request):
             else:
                 clean_phone = phone_number
 
-            # Paystack expects amount in sub-units (e.g. KES 10.00 = 1000)
-            amount_in_cents = int(package.price * 100)
+            # Paystack expects amount in KES kobo/cents (e.g., KES 10 = 1000)
+            amount_in_cents = int(float(package.price) * 100)
 
-            # Paystack API Initialization Payload
+            # Ensure you have your Paystack Secret Key set in settings.py or environment
+            paystack_secret_key = getattr(settings, 'PAYSTACK_SECRET_KEY', 'sk_test_your_secret_key_here')
+
             paystack_url = "https://api.paystack.co/transaction/initialize"
             headers = {
-                "Authorization": f"Bearer {settings.PAYSTACK_SECRET_KEY}",
+                "Authorization": f"Bearer {paystack_secret_key}",
                 "Content-Type": "application/json"
             }
             
-            # Construct Callback URL dynamically
             callback_url = request.build_absolute_uri('/paystack/callback/')
 
             payload = {
@@ -65,9 +66,13 @@ def guest_portal_view(request):
             response = requests.post(paystack_url, json=payload, headers=headers)
             res_data = response.json()
 
-            if res_data.get('status'):
-                # Save pending transaction with Paystack reference
+            # DEBUG PRINT TO RENDER LOGS
+            print("Paystack API Response:", res_data)
+
+            if res_data.get('status') and 'data' in res_data and 'authorization_url' in res_data['data']:
                 reference = res_data['data']['reference']
+                
+                # Create pending transaction record
                 Transaction.objects.create(
                     phone_number=clean_phone,
                     amount=package.price,
@@ -78,10 +83,11 @@ def guest_portal_view(request):
                     status='PENDING'
                 )
                 
-                # REDIRECT directly to Paystack payment gateway
+                # REDIRECT directly to Paystack payment gateway page
                 return redirect(res_data['data']['authorization_url'])
             else:
-                messages.error(request, "Failed to initialize Paystack transaction. Try again.")
+                error_msg = res_data.get('message', 'Failed to initialize Paystack transaction.')
+                messages.error(request, f"Paystack Error: {error_msg}")
 
         except Package.DoesNotExist:
             messages.error(request, "Selected package is invalid.")
