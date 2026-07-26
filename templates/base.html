@@ -7,11 +7,11 @@
     <title>{% block title %}Orb Cyber Café{% endblock %}</title>
     
     <!-- Bootstrap 5 CSS & Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
-    <!-- Global CSS Stylesheets -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!-- Global CSS Stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
     
     <!-- Page-Specific CSS Block -->
     {% block extra_css %}{% endblock %}
@@ -26,7 +26,6 @@
         {% block content %}{% endblock %}
     </main>
 
-   
     <!-- Global Embedded Footer -->
     <footer class="site-footer bg-dark text-light border-top border-secondary pt-5 pb-4 mt-auto">
         <div class="container">
@@ -41,13 +40,13 @@
                         Your premier hub for automated high-speed Wi-Fi, e-Government services, computer training, and expert IT support.
                     </p>
                     <div class="d-flex gap-2">
-                        <a href="https://wa.me/254712345678" target="_blank" class="footer-social-icon" title="WhatsApp">
+                        <a href="https://wa.me/254743634717" target="_blank" class="footer-social-icon text-white" title="WhatsApp">
                             <i class="bi bi-whatsapp"></i>
                         </a>
-                        <a href="#" class="footer-social-icon" title="Facebook">
+                        <a href="#" class="footer-social-icon text-white" title="Facebook">
                             <i class="bi bi-facebook"></i>
                         </a>
-                        <a href="#" class="footer-social-icon" title="Twitter/X">
+                        <a href="#" class="footer-social-icon text-white" title="Twitter/X">
                             <i class="bi bi-twitter-x"></i>
                         </a>
                     </div>
@@ -57,10 +56,10 @@
                 <div class="col-lg-2 col-md-6">
                     <h6 class="fw-bold text-white mb-3 text-uppercase fs-7">Quick Links</h6>
                     <ul class="list-unstyled footer-links small">
-                        <li class="mb-2"><a href="{% url 'home' %}">Home</a></li>
-                        <li class="mb-2"><a href="{% url 'guest_portal' %}">Buy Wi-Fi</a></li>
-                        <li class="mb-2"><a href="{% url 'solutions' %}">Digital Solutions</a></li>
-                        <li class="mb-2"><a href="{% url 'courses' %}">Tech Courses</a></li>
+                        <li class="mb-2"><a href="{% url 'home' %}" class="text-secondary text-decoration-none">Home</a></li>
+                        <li class="mb-2"><a href="{% url 'home' %}#guest-portal" class="text-secondary text-decoration-none">Buy Wi-Fi</a></li>
+                        <li class="mb-2"><a href="{% url 'home' %}#digital-solutions" class="text-secondary text-decoration-none">Digital Solutions</a></li>
+                        <li class="mb-2"><a href="{% url 'courses' %}" class="text-secondary text-decoration-none">Tech Courses</a></li>
                     </ul>
                 </div>
 
@@ -68,10 +67,10 @@
                 <div class="col-lg-3 col-md-6">
                     <h6 class="fw-bold text-white mb-3 text-uppercase fs-7">Our Services</h6>
                     <ul class="list-unstyled footer-links small">
-                        <li class="mb-2"><a href="{% url 'guest_portal' %}">M-Pesa Hotspot Packages</a></li>
-                        <li class="mb-2"><a href="{% url 'solutions' %}">KRA & eCitizen Filings</a></li>
-                        <li class="mb-2"><a href="{% url 'courses' %}">Computer Packages Training</a></li>
-                        <li class="mb-2"><a href="{% url 'solutions' %}">Hardware & Software Maintenance</a></li>
+                        <li class="mb-2"><a href="{% url 'home' %}#guest-portal" class="text-secondary text-decoration-none">M-Pesa Hotspot Packages</a></li>
+                        <li class="mb-2"><a href="{% url 'home' %}#digital-solutions" class="text-secondary text-decoration-none">KRA & eCitizen Filings</a></li>
+                        <li class="mb-2"><a href="{% url 'courses' %}" class="text-secondary text-decoration-none">Computer Packages Training</a></li>
+                        <li class="mb-2"><a href="{% url 'home' %}#digital-solutions" class="text-secondary text-decoration-none">Hardware & Maintenance</a></li>
                     </ul>
                 </div>
 
@@ -86,7 +85,7 @@
                     </p>
                     <div class="p-3 rounded bg-secondary bg-opacity-10 border border-secondary border-opacity-25">
                         <span class="d-block text-warning fw-bold small">Need Quick Help?</span>
-                        <span class="text-secondary extra-small">Call/WhatsApp: +254 712 345 678</span>
+                        <span class="text-secondary extra-small">Call/WhatsApp: +254 743634717</span>
                     </div>
                 </div>
             </div>
@@ -107,28 +106,20 @@
         </div>
     </footer>
 
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- Page-Specific JS Block -->
-    {% block extra_js %}{% endblock %}
-   
-
-<!-- Floating WhatsApp Button -->
-    <a href="https://wa.me/254712345678?text=Hello%20Orb%20Cyber%20Caf%C3%A9,%20I%20would%20like%20to%20make%20an%20inquiry%20about%20your%20services."
-       class="whatsapp-float" 
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/254743634717?text=Hello%20Orb%20Cyber%20Caf%C3%A9,%20I%20would%20like%20to%20make%20an%20inquiry%20about%20your%20services."
+       class="whatsapp-float position-fixed bottom-0 end-0 m-4 btn btn-success rounded-circle shadow-lg d-flex align-items-center justify-content-center" 
+       style="width: 55px; height: 55px; z-index: 1000;"
        target="_blank" 
        rel="noopener noreferrer" 
        aria-label="Chat on WhatsApp">
-        <i class="bi bi-whatsapp"></i>
+        <i class="bi bi-whatsapp fs-3"></i>
     </a>
 
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     
-    
-</body>
+    <!-- Page-Specific JS Block -->
+    {% block extra_js %}{% endblock %}
 </body>
 </html>
-
-   
