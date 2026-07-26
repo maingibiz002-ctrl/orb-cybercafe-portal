@@ -1,11 +1,13 @@
-# wifi_app/views.py
 import uuid
+import requests
+from django.conf import settings
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from .models import Package, Transaction, ActiveSession
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
+
 
 def home_view(request):
     """Renders the personal homepage with services."""
@@ -18,6 +20,9 @@ def guest_portal_view(request):
     router_ip = request.GET.get('ip', '')
 
     if request.method == 'POST':
+        print("\n================ PAYSTACK DEBUG START ================")
+        print("POST Data Received:", request.POST)
+
         package_id = request.POST.get('package_id')
         email = request.POST.get('email', 'guest@orbcybercafe.com')
         phone_number = request.POST.get('phone_number', '').strip()
@@ -26,6 +31,7 @@ def guest_portal_view(request):
 
         try:
             package = Package.objects.get(id=package_id)
+            print(f"Package Found: {package.name} | Price: {package.price}")
 
             # Format phone number to standard format
             if phone_number.startswith('0'):
@@ -38,8 +44,9 @@ def guest_portal_view(request):
             # Paystack expects amount in KES kobo/cents (e.g., KES 10 = 1000)
             amount_in_cents = int(float(package.price) * 100)
 
-            # Ensure you have your Paystack Secret Key set in settings.py or environment
+            # Retrieve Paystack Secret Key from settings/environment
             paystack_secret_key = getattr(settings, 'PAYSTACK_SECRET_KEY', 'sk_test_your_secret_key_here')
+            print(f"Secret Key Loaded: {'YES' if paystack_secret_key and not paystack_secret_key.startswith('sk_test_your_secret') else 'NO (Default/Missing)'}")
 
             paystack_url = "https://api.paystack.co/transaction/initialize"
             headers = {
@@ -62,12 +69,15 @@ def guest_portal_view(request):
                 }
             }
 
+            print("Sending Payload to Paystack:", payload)
+
             # Call Paystack API
             response = requests.post(paystack_url, json=payload, headers=headers)
-            res_data = response.json()
+            print(f"Paystack HTTP Status Code: {response.status_code}")
 
-            # DEBUG PRINT TO RENDER LOGS
-            print("Paystack API Response:", res_data)
+            res_data = response.json()
+            print("Paystack API Full Response:", res_data)
+            print("================ PAYSTACK DEBUG END ==================\n")
 
             if res_data.get('status') and 'data' in res_data and 'authorization_url' in res_data['data']:
                 reference = res_data['data']['reference']
@@ -83,15 +93,17 @@ def guest_portal_view(request):
                     status='PENDING'
                 )
                 
-                # REDIRECT directly to Paystack payment gateway page
+                print(f"Redirecting user to Paystack: {res_data['data']['authorization_url']}")
                 return redirect(res_data['data']['authorization_url'])
             else:
                 error_msg = res_data.get('message', 'Failed to initialize Paystack transaction.')
                 messages.error(request, f"Paystack Error: {error_msg}")
 
         except Package.DoesNotExist:
+            print("ERROR: Package.DoesNotExist for ID:", package_id)
             messages.error(request, "Selected package is invalid.")
         except Exception as e:
+            print("EXCEPTION OCCURRED:", str(e))
             messages.error(request, f"Error initializing payment: {str(e)}")
 
     return render(request, 'guest_portal.html', {
@@ -99,6 +111,7 @@ def guest_portal_view(request):
         'router_mac': router_mac,
         'router_ip': router_ip
     })
+
 
 def solutions_view(request):
     """Placeholder view for Digital Solutions."""
@@ -109,7 +122,6 @@ def courses_view(request):
     """Placeholder view for Tech Courses."""
     return render(request, 'home.html')
 
-# --- ADD THESE MISSING PAYSTACK VIEWS ---
 
 def paystack_callback(request):
     """
@@ -141,7 +153,6 @@ def paystack_callback(request):
     else:
         messages.error(request, "Invalid payment callback reference.")
 
-    # Redirect user back to the Wi-Fi package page instead of raw text
     return redirect('guest_portal')
 
 
@@ -154,4 +165,3 @@ def paystack_webhook(request):
         # TODO: Verify Paystack signature header and process payment status
         return JsonResponse({'status': 'success'}, status=200)
     return HttpResponse(status=400)
-
