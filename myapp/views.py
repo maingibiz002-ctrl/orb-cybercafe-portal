@@ -10,8 +10,16 @@ from django.contrib import messages
 
 
 def home_view(request):
-    """Renders the personal homepage with services."""
-    return render(request, 'home.html')
+    """Renders the personal homepage with embedded captive portal packages."""
+    packages = Package.objects.all()
+    router_mac = request.GET.get('mac', '')
+    router_ip = request.GET.get('ip', '')
+
+    return render(request, 'home.html', {
+        'packages': packages,
+        'router_mac': router_mac,
+        'router_ip': router_ip,
+    })
 
 
 def guest_portal_view(request):

@@ -19,10 +19,10 @@
             Your hub for high-speed internet, government processing, IT consultancy, and tech training.
         </p>
         <div class="d-flex justify-content-center gap-3">
-            <a href="{% url 'guest_portal' %}" class="btn btn-orange-hero text-decoration-none">
+            <a href="#guest-portal" class="btn btn-orange-hero text-decoration-none">
                 <i class="bi bi-lightning-charge-fill me-1"></i> Buy Wi-Fi
             </a>
-            <a href="#services" class="btn btn-outline-hero text-decoration-none">
+            <a href="#digital-solutions" class="btn btn-outline-hero text-decoration-none">
                 Explore Services
             </a>
         </div>
@@ -30,32 +30,15 @@
 </header>
 
 <main class="container my-5">
-    <!-- Services Section -->
-    <section id="services" class="mb-5">
+
+    <!-- 1. DIGITAL SOLUTIONS & SERVICES -->
+    <section id="digital-solutions" class="mb-5">
         <div class="d-flex align-items-center gap-2 mb-4 ms-1">
-            <i class="bi bi-grid-3x3-gap-fill text-warning fs-5"></i>
-            <h2 class="section-title mb-0 text-dark fw-bold fs-4">Our Services</h2>
+            <i class="bi bi-cpu-fill text-warning fs-5"></i>
+            <h2 class="section-title mb-0 text-dark fw-bold fs-4">Digital Solutions & Services</h2>
         </div>
 
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-            <!-- Wi-Fi Access -->
-            <div class="col">
-                <div class="card service-card h-100 p-4">
-                    <div class="card-body d-flex flex-column p-0">
-                        <div class="service-icon-wrapper mb-3">
-                            <i class="bi bi-wifi"></i>
-                        </div>
-                        <h3 class="service-title mb-2">Hotspot Wi-Fi</h3>
-                        <p class="service-desc flex-grow-1 mb-3">
-                            Instant, high-speed Wi-Fi access via automated M-Pesa payments.
-                        </p>
-                        <a href="{% url 'guest_portal' %}" class="service-link mt-auto">
-                            Connect Now <i class="bi bi-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
+        <div class="row row-cols-1 row-cols-md-3 g-4">
             <!-- Gov Services -->
             <div class="col">
                 <div class="card service-card h-100 p-4">
@@ -63,30 +46,12 @@
                         <div class="service-icon-wrapper mb-3">
                             <i class="bi bi-file-earmark-text"></i>
                         </div>
-                        <h3 class="service-title mb-2">E-Government</h3>
+                        <h3 class="service-title mb-2">E-Government Services</h3>
                         <p class="service-desc flex-grow-1 mb-3">
-                            Fast assistance with eCitizen, KRA tax returns, NTSA, and document processing.
+                            Fast assistance with eCitizen, KRA tax returns, NTSA, SHA, and document processing.
                         </p>
                         <a href="{% url 'solutions' %}" class="service-link mt-auto">
                             Learn More <i class="bi bi-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tech Courses -->
-            <div class="col">
-                <div class="card service-card h-100 p-4">
-                    <div class="card-body d-flex flex-column p-0">
-                        <div class="service-icon-wrapper mb-3">
-                            <i class="bi bi-laptop"></i>
-                        </div>
-                        <h3 class="service-title mb-2">Tech Training</h3>
-                        <p class="service-desc flex-grow-1 mb-3">
-                            Practical courses in computer packages, web development, and networking.
-                        </p>
-                        <a href="{% url 'courses' %}" class="service-link mt-auto">
-                            View Courses <i class="bi bi-arrow-right"></i>
                         </a>
                     </div>
                 </div>
@@ -99,9 +64,9 @@
                         <div class="service-icon-wrapper mb-3">
                             <i class="bi bi-tools"></i>
                         </div>
-                        <h3 class="service-title mb-2">IT Support</h3>
+                        <h3 class="service-title mb-2">IT Consultancy & Support</h3>
                         <p class="service-desc flex-grow-1 mb-3">
-                            Software installation, computer maintenance, and custom network setup.
+                            Software installation, hardware maintenance, network infrastructure, and computer repair.
                         </p>
                         <a href="https://wa.me/254712345678" target="_blank" class="service-link mt-auto">
                             Contact Support <i class="bi bi-arrow-right"></i>
@@ -109,10 +74,145 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Printing & Graphic Design -->
+            <div class="col">
+                <div class="card service-card h-100 p-4">
+                    <div class="card-body d-flex flex-column p-0">
+                        <div class="service-icon-wrapper mb-3">
+                            <i class="bi bi-printer"></i>
+                        </div>
+                        <h3 class="service-title mb-2">Printing & Document Design</h3>
+                        <p class="service-desc flex-grow-1 mb-3">
+                            High-quality color printing, scanning, passport photo processing, and graphic design.
+                        </p>
+                        <a href="{% url 'solutions' %}" class="service-link mt-auto">
+                            View Details <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- About Us Section -->
+    <!-- 2. TECH COURSES -->
+    <section id="tech-courses" class="mb-5">
+        <div class="d-flex align-items-center gap-2 mb-4 ms-1">
+            <i class="bi bi-laptop text-warning fs-5"></i>
+            <h2 class="section-title mb-0 text-dark fw-bold fs-4">Tech Courses & Training</h2>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col">
+                <div class="card service-card h-100 p-4 border-warning border-opacity-25">
+                    <div class="card-body d-flex flex-column p-0">
+                        <div class="service-icon-wrapper mb-3">
+                            <i class="bi bi-journal-code"></i>
+                        </div>
+                        <h3 class="service-title mb-2">Computer Packages</h3>
+                        <p class="service-desc flex-grow-1 mb-3">
+                            Master MS Office Suite, Internet navigation, email etiquette, and operating system basics.
+                        </p>
+                        <a href="{% url 'courses' %}" class="service-link mt-auto">
+                            Enroll Now <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card service-card h-100 p-4 border-warning border-opacity-25">
+                    <div class="card-body d-flex flex-column p-0">
+                        <div class="service-icon-wrapper mb-3">
+                            <i class="bi bi-code-slash"></i>
+                        </div>
+                        <h3 class="service-title mb-2">Web Development</h3>
+                        <p class="service-desc flex-grow-1 mb-3">
+                            Learn HTML, CSS, JavaScript, and Django to build modern web applications from scratch.
+                        </p>
+                        <a href="{% url 'courses' %}" class="service-link mt-auto">
+                            Enroll Now <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card service-card h-100 p-4 border-warning border-opacity-25">
+                    <div class="card-body d-flex flex-column p-0">
+                        <div class="service-icon-wrapper mb-3">
+                            <i class="bi bi-diagram-3"></i>
+                        </div>
+                        <h3 class="service-title mb-2">Networking Essentials</h3>
+                        <p class="service-desc flex-grow-1 mb-3">
+                            Hands-on training in LAN setup, Mikrotik routing, Wi-Fi configuration, and security.
+                        </p>
+                        <a href="{% url 'courses' %}" class="service-link mt-auto">
+                            Enroll Now <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. GUEST PORTAL / CAPTIVE HOTSPOT PACKAGES -->
+    <section id="guest-portal" class="mb-5 p-4 p-md-5 rounded-4 bg-dark text-white shadow">
+        <div class="d-flex align-items-center gap-2 mb-4">
+            <i class="bi bi-wifi text-warning fs-3"></i>
+            <div>
+                <h2 class="section-title mb-0 text-white fw-bold fs-3">Wi-Fi Hotspot Packages</h2>
+                <p class="text-secondary mb-0 small">Select a package to get connected instantly via M-Pesa</p>
+            </div>
+        </div>
+
+        <!-- Messages / Alerts -->
+        {% if error %}
+        <div class="alert alert-danger alert-dismissible fade show mb-4 rounded-3" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ error }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endif %}
+
+        {% if success %}
+        <div class="alert alert-success alert-dismissible fade show mb-4 rounded-3" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>{{ success }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endif %}
+
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for package in packages %}
+            <div class="col">
+                <div class="card h-100 p-4 bg-secondary bg-opacity-25 border border-secondary rounded-4 text-white">
+                    <div class="card-body d-flex flex-column p-0">
+                        <h3 class="text-warning fw-bold mb-2 fs-4">{{ package.name }}</h3>
+                        <div class="display-6 fw-bold mb-3">Ksh. {{ package.price }}</div>
+
+                        <p class="text-light opacity-75 flex-grow-1 mb-4 small">
+                            <i class="bi bi-clock me-1 text-warning"></i>
+                            Valid for {{ package.duration_hours }} Hour{% if package.duration_hours > 1 %}s{% endif %} of uninterrupted high-speed internet access.
+                        </p>
+
+                        <button type="button" 
+                                class="btn btn-warning w-100 fw-bold py-2" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#paystackModal"
+                                onclick="setModalData('{{ package.id }}', '{{ package.name }}', '{{ package.price }}')">
+                            Select & Pay
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-4">
+                <p class="text-secondary mb-0">No active packages found. Please check back shortly.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- 4. ABOUT US -->
     <section id="about" class="mb-5">
         <div class="d-flex align-items-center gap-2 mb-4 ms-1">
             <i class="bi bi-info-circle-fill text-warning fs-5"></i>
@@ -167,7 +267,7 @@
         </div>
     </section>
 
-    <!-- Location & Contact Section -->
+    <!-- 5. FIND US / LOCATION -->
     <section id="location">
         <div class="d-flex align-items-center gap-2 mb-4 ms-1">
             <i class="bi bi-geo-alt-fill text-warning fs-5"></i>
@@ -228,5 +328,86 @@
             </div>
         </div>
     </section>
+
 </main>
+
+<!-- Paystack Modal -->
+<div class="modal fade" id="paystackModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-light border border-secondary shadow-lg">
+            
+            <div class="modal-header border-bottom border-secondary">
+                <h5 class="modal-title fw-bold text-white d-flex align-items-center gap-2">
+                    <i class="bi bi-credit-card-fill text-warning"></i> Pay with Paystack
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form method="POST" action="{% url 'guest_portal' %}">
+                {% csrf_token %}
+                <div class="modal-body p-4">
+                    
+                    <input type="hidden" name="package_id" id="modal_package_id">
+                    <input type="hidden" name="mac_address" value="{{ router_mac }}">
+                    <input type="hidden" name="ip_address" value="{{ router_ip }}">
+
+                    <!-- Selected Package Info -->
+                    <div class="mb-3">
+                        <label class="form-label text-warning small fw-bold text-uppercase">Selected Package</label>
+                        <input type="text" id="modal_package_name" class="form-control bg-secondary bg-opacity-25 text-white border-secondary" readonly>
+                    </div>
+
+                    <!-- Amount Info -->
+                    <div class="mb-3">
+                        <label class="form-label text-warning small fw-bold text-uppercase">Amount (KES)</label>
+                        <input type="text" id="modal_package_price" class="form-control bg-secondary bg-opacity-25 text-white border-secondary" readonly>
+                    </div>
+
+                    <!-- Customer Phone Number -->
+                    <div class="mb-3">
+                        <label for="phone_number" class="form-label text-white small fw-bold">M-Pesa / Phone Number</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-secondary text-white border-secondary">+254</span>
+                            <input type="text" name="phone_number" id="phone_number" class="form-control bg-dark text-white border-secondary" placeholder="712345678" required>
+                        </div>
+                    </div>
+
+                    <!-- Customer Email (Paystack Requirement) -->
+                    <div class="mb-3">
+                        <label for="email" class="form-label text-white small fw-bold">Email Address</label>
+                        <input type="email" name="email" id="email" class="form-control bg-dark text-white border-secondary" placeholder="customer@example.com" value="guest@orbcybercafe.com" required>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer border-top border-secondary">
+                    <button type="submit" class="btn btn-warning w-100 fw-bold py-2">
+                        Proceed to Paystack Payment
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function setModalData(id, name, price) {
+    document.getElementById('modal_package_id').value = id;
+    document.getElementById('modal_package_name').value = name;
+    document.getElementById('modal_package_price').value = 'Ksh. ' + price;
+}
+</script>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function setModalData(id, name, price) {
+    document.getElementById('modal_package_id').value = id;
+    document.getElementById('modal_package_name').value = name;
+    document.getElementById('modal_package_price').value = 'Ksh. ' + price;
+}
+</script>
 {% endblock %}
