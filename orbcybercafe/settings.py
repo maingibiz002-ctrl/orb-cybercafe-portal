@@ -127,3 +127,6 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Paystack Domain Configurations
 PAYSTACK_CALLBACK_URL = 'https://orb-cybercafe-portal.onrender.com/paystack/callback/'
 PAYSTACK_WEBHOOK_URL = 'https://orb-cybercafe-portal.onrender.com/paystack/webhook/'
+
+# Add or update this in settings.py
+SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
