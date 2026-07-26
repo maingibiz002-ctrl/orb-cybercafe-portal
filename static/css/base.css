@@ -6,7 +6,7 @@
     --brand-dark-card: #1e2429;
     --brand-orange: #ff6b00;
     --brand-orange-hover: #e05e00;
-    --brand-yellow: #ffb703;
+    --brand-yellow: #ff6b00;
     --brand-light-bg: #f8f9fa;
     --brand-text-dark: #212529;
     --brand-text-muted: #6c757d;
@@ -83,7 +83,7 @@
 
 /* Hover State */
 .custom-nav-link:hover {
-    color: var(--brand-yellow, #ffb703) !important;
+    color: var(--brand-yellow, #ff6b00) !important;
     background-color: rgba(255, 255, 255, 0.08);
     transform: translateY(-1px);
 }
@@ -110,7 +110,7 @@
     position: absolute;
     width: 46px;
     height: 22px;
-    border: 3px solid #ff7700;
+    border: 3px solid #ff6b00;
     border-radius: 50%;
     box-shadow: 0 0 8px rgba(255, 119, 0, 0.8), inset 0 0 6px rgba(255, 119, 0, 0.5);
 }
@@ -127,9 +127,9 @@
 .logo-orbit-container .core-diamond {
     width: 10px;
     height: 10px;
-    background: linear-gradient(135deg, #ffb703, #ff5500);
+    background: linear-gradient(135deg, #ff6b00, #ff5500);
     transform: rotate(45deg);
-    box-shadow: 0 0 10px #ffb703, 0 0 15px #ff5500;
+    box-shadow: 0 0 10px #ff6b00, 0 0 15px #ff5500;
     z-index: 2;
 }
 
