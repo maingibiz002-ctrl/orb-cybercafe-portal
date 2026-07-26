@@ -173,3 +173,19 @@ def paystack_webhook(request):
         # TODO: Verify Paystack signature header and process payment status
         return JsonResponse({'status': 'success'}, status=200)
     return HttpResponse(status=400)
+
+def courses_view(request):
+    """Renders course listings and handles enrollment form submissions."""
+    if request.method == 'POST':
+        full_name = request.POST.get('full_name')
+        phone = request.POST.get('phone_number')
+        email = request.POST.get('email')
+        course = request.POST.get('course_name')
+
+        # Print details to logs or save to database model if desired
+        print(f"NEW ENROLLMENT: {full_name} | {phone} | {email} | Course: {course}")
+
+        messages.success(request, f"Thank you, {full_name}! Your enrollment application for {course} has been received. Our team will contact you shortly.")
+        return redirect('courses')
+
+    return render(request, 'courses.html')
