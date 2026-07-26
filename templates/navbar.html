@@ -1,10 +1,20 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
     <div class="container">
         <!-- Brand Logo / Name -->
-        <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="{% url 'home' %}">
-            <i class="bi bi-wifi text-warning fs-4"></i>
-            <span>Orb Cyber Café</span>
-        </a>
+        <a class="navbar-brand d-flex align-items-center gap-3 text-decoration-none py-1" href="{% url 'home' %}">
+    <!-- CSS ORBIT ICON -->
+    <div class="logo-orbit-container">
+        <div class="ring ring-1"></div>
+        <div class="ring ring-2"></div>
+        <div class="core-diamond"></div>
+    </div>
+
+    <!-- LOGO TEXT -->
+    <div class="logo-text-group">
+        <span class="brand-orb">ORB</span>
+        <span class="brand-sub">— CYBER CAFÉ —</span>
+    </div>
+</a>
 
         <!-- Mobile Toggle Button -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

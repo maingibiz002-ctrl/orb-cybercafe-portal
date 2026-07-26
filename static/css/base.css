@@ -93,3 +93,70 @@
 .custom-nav-link.active {
     color: var(--brand-orange, #ff6b00) !important;
 }
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600;900&display=swap');
+
+/* --- LOGO CONTAINER --- */
+.logo-orbit-container {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- GLOWING ORBITAL RINGS --- */
+.logo-orbit-container .ring {
+    position: absolute;
+    width: 46px;
+    height: 22px;
+    border: 3px solid #ff7700;
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(255, 119, 0, 0.8), inset 0 0 6px rgba(255, 119, 0, 0.5);
+}
+
+.logo-orbit-container .ring-1 {
+    transform: rotate(45deg);
+}
+
+.logo-orbit-container .ring-2 {
+    transform: rotate(-45deg);
+}
+
+/* --- CENTER DIAMOND CORE --- */
+.logo-orbit-container .core-diamond {
+    width: 10px;
+    height: 10px;
+    background: linear-gradient(135deg, #ffb703, #ff5500);
+    transform: rotate(45deg);
+    box-shadow: 0 0 10px #ffb703, 0 0 15px #ff5500;
+    z-index: 2;
+}
+
+/* --- LOGO TEXT GROUP --- */
+.logo-text-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Orbitron', system-ui, sans-serif;
+    line-height: 1;
+}
+
+.brand-orb {
+    font-size: 1.8rem;
+    font-weight: 900;
+    letter-spacing: 3px;
+    background: linear-gradient(180deg, #ffb703 0%, #ff5500 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 4px rgba(255, 85, 0, 0.4));
+}
+
+.brand-sub {
+    font-size: 0.55rem;
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: 2.5px;
+    margin-top: 2px;
+    opacity: 0.9;
+}
