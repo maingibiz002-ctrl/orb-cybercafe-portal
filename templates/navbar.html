@@ -1,9 +1,28 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom border-secondary sticky-top">
     <div class="container">
         <!-- Brand Logo / Name -->
-        <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="{% url 'home' %}">
-            <i class="bi bi-wifi text-warning fs-4"></i>
-            <span>Orb Cyber Café</span>
+      <!-- Logo Icon + Title -->
+        <a class="navbar-brand d-flex align-items-center gap-2 py-1" href="{% url 'home' %}">
+            <svg width="180" height="42" viewBox="0 0 520 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="orbGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#FF6B00" />
+                        <stop offset="100%" stop-color="#FFB703" />
+                    </linearGradient>
+                </defs>
+                <!-- Globe Sphere Icon -->
+                <g transform="translate(10, 10)">
+                    <circle cx="50" cy="50" r="38" fill="#1e2429" stroke="url(#orbGrad)" stroke-width="4" />
+                    <ellipse cx="50" cy="50" rx="38" ry="14" fill="none" stroke="#FFB703" stroke-width="2" opacity="0.6" />
+                    <ellipse cx="50" cy="50" rx="16" ry="38" fill="none" stroke="#FFB703" stroke-width="2" opacity="0.6" />
+                    <path d="M 22 32 A 32 32 0 0 1 78 32" fill="none" stroke="#FFB703" stroke-width="5" stroke-linecap="round" />
+                    <circle cx="50" cy="50" r="6" fill="#FF6B00" />
+                </g>
+                <!-- Brand Text -->
+                <text x="120" y="68" fill="#FFFFFF" font-size="48" font-weight="900" font-family="sans-serif">
+                    ORB <tspan fill="url(#orbGrad)">CYBER</tspan>
+                </text>
+            </svg>
         </a>
 
         <!-- Mobile Toggle Button -->
