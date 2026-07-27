@@ -56,3 +56,13 @@ class ActiveSession(models.Model):
 
     def __str__(self):
         return f"MAC: {self.mac_address} (Expires: {self.expires_at})"
+
+class Enrollment(models.Model):
+    full_name = models.CharField(max_length=150)
+    phone_number = models.CharField(max_length=20)
+    email = models.EmailField(blank=True, null=True)
+    course_name = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.full_name} - {self.course_name}"

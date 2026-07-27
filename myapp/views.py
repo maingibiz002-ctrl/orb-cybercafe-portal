@@ -182,10 +182,18 @@ def courses_view(request):
         email = request.POST.get('email')
         course = request.POST.get('course_name')
 
-        # Print details to logs or save to database model if desired
-        print(f"NEW ENROLLMENT: {full_name} | {phone} | {email} | Course: {course}")
+        # Save to database
+        Enrollment.objects.create(
+            full_name=full_name,
+            phone_number=phone,
+            email=email,
+            course_name=course
+        )
 
-        messages.success(request, f"Thank you, {full_name}! Your enrollment application for {course} has been received. Our team will contact you shortly.")
+        messages.success(
+            request, 
+            f"Thank you, {full_name}! Your enrollment application for {course} has been received. Our team will contact you shortly."
+        )
         return redirect('courses')
 
     return render(request, 'courses.html')

@@ -1,6 +1,7 @@
 from django.contrib import admin
 # We import our custom tables from models.py
 from .models import Package, Transaction, ActiveSession
+from .models import Enrollment
 
 # We register them so they appear in your browser dashboard
 admin.site.register(Package)
@@ -20,3 +21,11 @@ class TransactionAdmin(admin.ModelAdmin):
     
     # Keeps the records ordered by the newest transaction first
     ordering = ('-created_at',)
+
+
+
+@admin.register(Enrollment)
+class EnrollmentAdmin(admin.ModelAdmin):
+    list_display = ('full_name', 'course_name', 'phone_number', 'email', 'created_at')
+    search_fields = ('full_name', 'phone_number', 'email', 'course_name')
+    list_filter = ('course_name', 'created_at')
