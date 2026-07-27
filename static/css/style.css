@@ -54,3 +54,34 @@ body {
     transform: scale(1.1);
     box-shadow: 0px 6px 16px rgba(37, 211, 102, 0.5);
 }
+
+/* Navbar Logo Styling */
+.navbar-logo-svg {
+    width: 170px;
+    height: auto;
+    display: block;
+}
+
+/* Custom Styled Navbar CTA Button */
+.btn-navbar-cta {
+    background-color: #FF6B00; /* Burn Orange */
+    color: #ffffff !important;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 0.45rem 1.1rem;
+    border-radius: 50px;
+    border: 2px solid transparent;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 0 10px rgba(255, 107, 0, 0.3);
+}
+
+.btn-navbar-cta:hover {
+    background-color: #E05E00;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 107, 0, 0.5);
+}
+
+.btn-navbar-cta:active {
+    transform: translateY(0);
+}
