@@ -85,3 +85,8 @@ body {
 .btn-navbar-cta:active {
     transform: translateY(0);
 }
+.navbar-logo-svg {
+    width: 220px;
+    height: auto;
+    display: block;
+}
