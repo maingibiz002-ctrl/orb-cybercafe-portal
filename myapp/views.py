@@ -8,18 +8,11 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 
 
+# myapp/views.py
+from django.shortcuts import render
 
 def home_view(request):
-    """Renders the personal homepage with embedded captive portal packages."""
-    packages = Package.objects.all()
-    router_mac = request.GET.get('mac', '')
-    router_ip = request.GET.get('ip', '')
-
-    return render(request, 'home.html', {
-        'packages': packages,
-        'router_mac': router_mac,
-        'router_ip': router_ip,
-    })
+    return render(request, 'guest_portal.html')
 
 
 def guest_portal_view(request):
