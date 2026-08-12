@@ -2,12 +2,11 @@ import uuid
 import requests
 from django.conf import settings
 from django.shortcuts import render, redirect
-from django.utils import timezone
 from .models import Package, Transaction, ActiveSession
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
-from .models import Enrollment
+
 
 
 def home_view(request):
@@ -122,14 +121,10 @@ def guest_portal_view(request):
     })
 
 
-def solutions_view(request):
-    """Placeholder view for Digital Solutions."""
-    return render(request, 'home.html')
 
 
-def courses_view(request):
-    """Placeholder view for Tech Courses."""
-    return render(request, 'home.html')
+
+
 
 
 def paystack_callback(request):
@@ -175,26 +170,3 @@ def paystack_webhook(request):
         return JsonResponse({'status': 'success'}, status=200)
     return HttpResponse(status=400)
 
-def courses_view(request):
-    """Renders course listings and handles enrollment form submissions."""
-    if request.method == 'POST':
-        full_name = request.POST.get('full_name')
-        phone = request.POST.get('phone_number')
-        email = request.POST.get('email')
-        course = request.POST.get('course_name')
-
-        # Save to database
-        Enrollment.objects.create(
-            full_name=full_name,
-            phone_number=phone,
-            email=email,
-            course_name=course
-        )
-
-        messages.success(
-            request, 
-            f"Thank you, {full_name}! Your enrollment application for {course} has been received. Our team will contact you shortly."
-        )
-        return redirect('courses')
-
-    return render(request, 'courses.html')

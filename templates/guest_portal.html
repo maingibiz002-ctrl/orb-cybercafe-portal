@@ -1,165 +1,79 @@
-{% extends 'base.html' %}
-{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orb Cyber Café - Guest Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='guest_portal.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
 
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/guest_portal.css' %}">
-{% endblock %}
-
-{% block title %}Orb Cyber Café - Select Package{% endblock %}
-
-{% block content %}
-<!-- Top Header Banner -->
-<header class="portal-header text-center">
-    <div class="container">
-        <div class="d-flex align-items-center justify-content-center gap-2 mb-1">
-            <i class="bi bi-wifi wifi-icon display-6"></i>
-            <h1 class="brand-title mb-0">Orb Cyber Café</h1>
+    <!-- Header Section -->
+    <header class="portal-header">
+        <div class="brand">
+            <i class="fa-solid font-wifi fa-wifi"></i>
+            <h1>Orb Cyber Café</h1>
         </div>
-        <p class="mb-0">Select an internet package to connect instantly</p>
-    </div>
-</header>
+        <p>Select an internet package to connect instantly</p>
+    </header>
 
-<main class="container my-5">
-    <!-- Messages / Alerts -->
-    {% if error %}
-    <div class="alert alert-danger alert-dismissible fade show mb-4 rounded-3" role="alert">
-        <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ error }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    {% endif %}
-
-    {% if success %}
-    <div class="alert alert-success alert-dismissible fade show mb-4 rounded-3" role="alert">
-        <i class="bi bi-check-circle-fill me-2"></i>{{ success }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    {% endif %}
-
-    <!-- Section Heading -->
-    <div class="d-flex align-items-center gap-2 mb-4 ms-1">
-        <i class="bi bi-grid-3x3-gap-fill title-icon"></i>
-        <h2 class="section-title mb-0">Available Packages</h2>
-    </div>
-
-    <!-- Package Cards Grid -->
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        {% for package in packages %}
-        <div class="col">
-            <div class="card pkg-card h-100 p-4">
-                <div class="card-body d-flex flex-column p-0">
-                    <h3 class="pkg-title">{{ package.name }}</h3>
-                    <div class="pkg-divider"></div>
-
-                    <div class="pkg-price mb-3">
-                        Ksh. {{ package.price }}
-                    </div>
-
-                    <p class="pkg-info flex-grow-1 mb-4">
-                        <i class="bi bi-clock me-1"></i>
-                        Valid for {{ package.duration_hours }} Hour{% if package.duration_hours > 1 %}s{% endif %} of continuous high-speed browsing.
-                    </p>
-
-                    <!-- FIX 1: Pointing to #paystackModal -->
-                    <button type="button" 
-                            class="btn btn-select-pay w-100" 
-                            data-bs-toggle="modal" 
-                            data-bs-target="#paystackModal"
-                            onclick="setModalData('{{ package.id }}', '{{ package.name }}', '{{ package.price }}')">
-                        Select & Pay
-                    </button>
-                </div>
-            </div>
+    <!-- Content Container -->
+    <main class="container">
+        <div class="section-title">
+            <i class="fa-solid fa-border-all"></i>
+            <h2>Available Packages</h2>
         </div>
-        {% empty %}
-        <div class="col-12 text-center py-5">
-            <div class="p-4 rounded-3 bg-white border d-inline-block shadow-sm">
-                <i class="bi bi-wifi-off fs-2 text-warning mb-2 d-block"></i>
-                <h6 class="fw-bold text-dark">No Available Packages</h6>
-                <p class="text-muted small mb-0">Please check back later or ask an administrator.</p>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-</main>
 
-<!-- Payment Modal -->
-<div class="modal fade" id="paystackModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content bg-dark text-light border border-secondary shadow-lg">
+        <!-- Package Grid -->
+        <div class="package-grid">
             
-            <div class="modal-header border-bottom border-secondary">
-                <h5 class="modal-title fw-bold text-white d-flex align-items-center gap-2">
-                    <i class="bi bi-credit-card-fill text-warning"></i> Pay with Paystack
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            <!-- 1 Hour Package -->
+            <div class="package-card">
+                <h3>1 hour</h3>
+                <div class="price">Ksh. 10.00</div>
+                <p class="validity">
+                    <i class="fa-regular fa-clock"></i> 
+                    Valid for 1 Hour of continuous high-speed browsing.
+                </p>
+                <button class="btn-pay" onclick="selectPackage('1_hour', 10)">Select & Pay</button>
             </div>
 
-            <form method="POST" action="{% url 'guest_portal' %}">
-                {% csrf_token %}
-                <div class="modal-body p-4">
-                    
-                    <input type="hidden" name="package_id" id="modal_package_id">
-                    <input type="hidden" name="mac_address" value="{{ router_mac }}">
-                    <input type="hidden" name="ip_address" value="{{ router_ip }}">
+            <!-- 3 Hours Package -->
+            <div class="package-card">
+                <h3>3 hours</h3>
+                <div class="price">Ksh. 20.00</div>
+                <p class="validity">
+                    <i class="fa-regular fa-clock"></i> 
+                    Valid for 3 Hours of continuous high-speed browsing.
+                </p>
+                <button class="btn-pay" onclick="selectPackage('3_hours', 20)">Select & Pay</button>
+            </div>
 
-                    <!-- Selected Package Info -->
-                    <div class="mb-3">
-                        <label class="form-label text-warning small fw-bold text-uppercase">Selected Package</label>
-                        <input type="text" id="modal_package_name" class="form-control bg-secondary bg-opacity-25 text-white border-secondary" readonly>
-                    </div>
-
-                    <!-- Amount Info -->
-                    <div class="mb-3">
-                        <label class="form-label text-warning small fw-bold text-uppercase">Amount (KES)</label>
-                        <input type="text" id="modal_package_price" class="form-control bg-secondary bg-opacity-25 text-white border-secondary" readonly>
-                    </div>
-
-                    <!-- Customer Phone Number -->
-                    <div class="mb-3">
-                        <label for="phone_number" class="form-label text-white small fw-bold">M-Pesa / Phone Number</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-secondary text-white border-secondary">+254</span>
-                            <input type="text" name="phone_number" id="phone_number" class="form-control bg-dark text-white border-secondary" placeholder="712345678" required>
-                        </div>
-                    </div>
-
-                    <!-- Customer Email (Paystack Requirement) -->
-                    <div class="mb-3">
-                        <label for="email" class="form-label text-white small fw-bold">Email Address</label>
-                        <input type="email" name="email" id="email" class="form-control bg-dark text-white border-secondary" placeholder="customer@example.com" value="guest@orbcybercafe.com" required>
-                    </div>
-
-                </div>
-
-                <div class="modal-footer border-top border-secondary">
-                    <button type="submit" class="btn btn-warning w-100 fw-bold py-2">
-                        Proceed to Paystack Payment
-                    </button>
-                </div>
-            </form>
+            <!-- 5 Hours Package -->
+            <div class="package-card">
+                <h3>5 hours</h3>
+                <div class="price">Ksh. 30.00</div>
+                <p class="validity">
+                    <i class="fa-regular fa-clock"></i> 
+                    Valid for 5 Hours of continuous high-speed browsing.
+                </p>
+                <button class="btn-pay" onclick="selectPackage('5_hours', 30)">Select & Pay</button>
+            </div>
 
         </div>
-    </div>
-</div>
-{% endblock %}
+    </main>
 
-{% block extra_js %}
-<!-- FIX 2: Correct ID matching for JS -->
-<script>
-function setModalData(id, name, price) {
-    document.getElementById('modal_package_id').value = id;
-    document.getElementById('modal_package_name').value = name;
-    document.getElementById('modal_package_price').value = 'Ksh. ' + price;
-}
-</script>
-{% endblock %}
+    <!-- Floating WhatsApp Widget -->
+    <a href="https://wa.me/254700000000" class="whatsapp-float" target="_blank" aria-label="Support">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
 
-{% block scripts %}
-<script>
-function setModalData(id, name, price) {
-    document.getElementById('modal_package_id').value = id;
-    document.getElementById('modal_package_name').value = name;
-    document.getElementById('modal_package_price').value = 'Ksh. ' + price;
-}
-</script>
-{% endblock %}
+    <script>
+        function selectPackage(pkg, amount) {
+            alert('Selected ' + pkg + ' for Ksh. ' + amount);
+            // Trigger Paystack checkout or M-Pesa modal here
+        }
+    </script>
+</body>
+</html>
