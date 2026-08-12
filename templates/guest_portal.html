@@ -86,58 +86,58 @@
     </div>
 
     <script>
-        let selectedPkg = {};
+    let selectedPkg = {};
 
-        function selectPackage(pkgName, price) {
-            selectedPkg = { package: pkgName, amount: price };
-            document.getElementById('modalPackageTitle').innerText = pkgName + ' Package';
-            document.getElementById('modalPrice').innerText = 'Ksh. ' + price + '.00';
-            document.getElementById('paymentModal').style.display = 'flex';
+    function selectPackage(pkgName, price) {
+        selectedPkg = { package: pkgName, amount: price };
+        document.getElementById('modalPackageTitle').innerText = pkgName + ' Package';
+        document.getElementById('modalPrice').innerText = 'Ksh. ' + price + '.00';
+        document.getElementById('paymentModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('paymentModal').style.display = 'none';
+    }
+
+    async function processPayment() {
+        const phone = document.getElementById('phoneNumber').value.trim();
+        if (!phone) {
+            alert("Please enter a valid phone number.");
+            return;
         }
 
-        function closeModal() {
-            document.getElementById('paymentModal').style.display = 'none';
-        }
+        const btn = document.getElementById('payBtn');
+        btn.disabled = true;
+        btn.innerText = "Initializing Payment...";
 
-        async function processPayment() {
-            const phone = document.getElementById('phoneNumber').value.trim();
-            if (!phone) {
-                alert("Please enter a valid phone number.");
-                return;
-            }
+        try {
+            const response = await fetch('/initiate-payment/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({
+                    package: selectedPkg.package,
+                    amount: selectedPkg.amount,
+                    phone: phone
+                })
+            });
 
-            const btn = document.getElementById('payBtn');
-            btn.disabled = true;
-            btn.innerText = "Initializing Payment...";
-
-            try {
-                const response = await fetch('/initiate-payment/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': '{{ csrf_token }}'
-                    },
-                    body: JSON.stringify({
-                        package: selectedPkg.package,
-                        amount: selectedPkg.amount,
-                        phone: phone
-                    })
-                });
-
-                const data = await response.json();
-                if (data.status && data.authorization_url) {
-                    window.location.href = data.authorization_url; // Redirect to Paystack
-                } else {
-                    alert("Error: " + (data.message || "Failed to start payment process."));
-                    btn.disabled = false;
-                    btn.innerText = "Proceed to Paystack";
-                }
-            } catch (err) {
-                alert("Network error. Please try again.");
+            const data = await response.json();
+            if (data.status && data.authorization_url) {
+                window.location.href = data.authorization_url; // Directs to Paystack
+            } else {
+                alert("Error: " + (data.message || "Failed to start payment process."));
                 btn.disabled = false;
                 btn.innerText = "Proceed to Paystack";
             }
+        } catch (err) {
+            alert("Network error. Please try again.");
+            btn.disabled = false;
+            btn.innerText = "Proceed to Paystack";
         }
-    </script>
+    }
+</script>
 </body>
 </html>
