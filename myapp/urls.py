@@ -9,4 +9,6 @@ urlpatterns = [
     # Paystack Integration Routes
     path('paystack/callback/', views.paystack_callback, name='paystack_callback'),
     path('paystack/webhook/', views.paystack_webhook, name='paystack_webhook'),
+    path('initiate-payment/', views.initiate_payment, name='initiate_payment'),
+
 ]

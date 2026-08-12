@@ -10,7 +10,6 @@
 </head>
 <body>
 
-    <!-- Header Section -->
     <header class="portal-header">
         <div class="brand">
             <i class="fa-solid font-wifi fa-wifi"></i>
@@ -19,93 +18,125 @@
         <p>Select an internet package to connect instantly</p>
     </header>
 
-    <!-- Content Container -->
     <main class="container">
         <div class="section-title">
             <i class="fa-solid fa-border-all"></i>
             <h2>Available Packages</h2>
         </div>
 
-        <!-- Package Grid -->
         <div class="package-grid">
-            
-            <!-- 1 Hour Package -->
             <div class="package-card">
                 <h3>1 hour</h3>
                 <div class="price">Ksh. 10.00</div>
-                <p class="validity">
-                    <i class="fa-regular fa-clock"></i> 
-                    Valid for 1 Hour of continuous high-speed browsing.
-                </p>
-                <button class="btn-pay" onclick="selectPackage('1_hour', 10)">Select & Pay</button>
+                <p class="validity"><i class="fa-regular fa-clock"></i> Valid for 1 Hour continuous browsing.</p>
+                <button class="btn-pay" onclick="selectPackage('1 hour', 10)">Select & Pay</button>
             </div>
 
-            <!-- 3 Hours Package -->
             <div class="package-card">
                 <h3>3 hours</h3>
                 <div class="price">Ksh. 20.00</div>
-                <p class="validity">
-                    <i class="fa-regular fa-clock"></i> 
-                    Valid for 3 Hours of continuous high-speed browsing.
-                </p>
-                <button class="btn-pay" onclick="selectPackage('3_hours', 20)">Select & Pay</button>
+                <p class="validity"><i class="fa-regular fa-clock"></i> Valid for 3 Hours continuous browsing.</p>
+                <button class="btn-pay" onclick="selectPackage('3 hours', 20)">Select & Pay</button>
             </div>
 
-            <!-- 5 Hours Package -->
             <div class="package-card">
                 <h3>5 hours</h3>
                 <div class="price">Ksh. 30.00</div>
-                <p class="validity">
-                    <i class="fa-regular fa-clock"></i> 
-                    Valid for 5 Hours of continuous high-speed browsing.
-                </p>
-                <button class="btn-pay" onclick="selectPackage('5_hours', 30)">Select & Pay</button>
+                <p class="validity"><i class="fa-regular fa-clock"></i> Valid for 5 Hours continuous browsing.</p>
+                <button class="btn-pay" onclick="selectPackage('5 hours', 30)">Select & Pay</button>
             </div>
 
-            <!-- 24 Hours Package -->
             <div class="package-card">
                 <h3>24 hours</h3>
                 <div class="price">Ksh. 60.00</div>
-                <p class="validity">
-                    <i class="fa-regular fa-clock"></i> 
-                    Valid for 24 Hours of continuous high-speed browsing.
-                </p>
-                <button class="btn-pay" onclick="selectPackage('24_hours', 60)">Select & Pay</button>
+                <p class="validity"><i class="fa-regular fa-clock"></i> Valid for 24 Hours continuous browsing.</p>
+                <button class="btn-pay" onclick="selectPackage('24 hours', 60)">Select & Pay</button>
             </div>
 
-            <!-- Weekly Package -->
             <div class="package-card">
                 <h3>Weekly</h3>
                 <div class="price">Ksh. 200.00</div>
-                <p class="validity">
-                    <i class="fa-regular fa-clock"></i> 
-                    Valid for 7 Days of continuous high-speed browsing.
-                </p>
+                <p class="validity"><i class="fa-regular fa-clock"></i> Valid for 7 Days continuous browsing.</p>
                 <button class="btn-pay" onclick="selectPackage('weekly', 200)">Select & Pay</button>
             </div>
 
-            <!-- Monthly Package -->
             <div class="package-card">
                 <h3>Monthly</h3>
                 <div class="price">Ksh. 750.00</div>
-                <p class="validity">
-                    <i class="fa-regular fa-clock"></i> 
-                    Valid for 30 Days of continuous high-speed browsing.
-                </p>
+                <p class="validity"><i class="fa-regular fa-clock"></i> Valid for 30 Days continuous browsing.</p>
                 <button class="btn-pay" onclick="selectPackage('monthly', 750)">Select & Pay</button>
             </div>
-
         </div>
     </main>
 
-    <!-- Floating WhatsApp Widget -->
-    <a href="https://wa.me/254700000000" class="whatsapp-float" target="_blank" aria-label="Support">
-        <i class="fa-brands fa-whatsapp"></i>
-    </a>
+    <!-- Payment Checkout Modal -->
+    <div id="paymentModal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h3 id="modalPackageTitle">Package Checkout</h3>
+            <p class="modal-price" id="modalPrice">Ksh. 0.00</p>
+            
+            <div class="form-group">
+                <label for="phoneNumber">Phone Number (M-Pesa):</label>
+                <input type="tel" id="phoneNumber" placeholder="e.g. 0712345678" required>
+            </div>
+
+            <button id="payBtn" class="btn-pay modal-btn" onclick="processPayment()">Proceed to Paystack</button>
+        </div>
+    </div>
 
     <script>
-        function selectPackage(pkg, amount) {
-            alert('Selected ' + pkg + ' for Ksh. ' + amount);
+        let selectedPkg = {};
+
+        function selectPackage(pkgName, price) {
+            selectedPkg = { package: pkgName, amount: price };
+            document.getElementById('modalPackageTitle').innerText = pkgName + ' Package';
+            document.getElementById('modalPrice').innerText = 'Ksh. ' + price + '.00';
+            document.getElementById('paymentModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('paymentModal').style.display = 'none';
+        }
+
+        async function processPayment() {
+            const phone = document.getElementById('phoneNumber').value.trim();
+            if (!phone) {
+                alert("Please enter a valid phone number.");
+                return;
+            }
+
+            const btn = document.getElementById('payBtn');
+            btn.disabled = true;
+            btn.innerText = "Initializing Payment...";
+
+            try {
+                const response = await fetch('/initiate-payment/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({
+                        package: selectedPkg.package,
+                        amount: selectedPkg.amount,
+                        phone: phone
+                    })
+                });
+
+                const data = await response.json();
+                if (data.status && data.authorization_url) {
+                    window.location.href = data.authorization_url; // Redirect to Paystack
+                } else {
+                    alert("Error: " + (data.message || "Failed to start payment process."));
+                    btn.disabled = false;
+                    btn.innerText = "Proceed to Paystack";
+                }
+            } catch (err) {
+                alert("Network error. Please try again.");
+                btn.disabled = false;
+                btn.innerText = "Proceed to Paystack";
+            }
         }
     </script>
 </body>

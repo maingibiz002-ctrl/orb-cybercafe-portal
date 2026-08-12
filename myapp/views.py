@@ -14,105 +14,63 @@ from django.shortcuts import render
 def home_view(request):
     return render(request, 'guest_portal.html')
 
+import json
+import os
+import requests
+from django.http import JsonResponse
+from django.shortcuts import render
 
-def guest_portal_view(request):
-    packages = Package.objects.all()
-    router_mac = request.GET.get('mac', '')
-    router_ip = request.GET.get('ip', '')
+PAYSTACK_SECRET_KEY = os.getenv("PAYSTACK_SECRET_KEY", "sk_test_your_secret_key_here")
 
+def home_view(request):
+    return render(request, 'guest_portal.html')
+
+def initiate_payment(request):
     if request.method == 'POST':
-        print("\n================ PAYSTACK DEBUG START ================")
-        print("POST Data Received:", request.POST)
-
-        package_id = request.POST.get('package_id')
-        email = request.POST.get('email', 'guest@orbcybercafe.com')
-        phone_number = request.POST.get('phone_number', '').strip()
-        mac_address = request.POST.get('mac_address') or router_mac
-        ip_address = request.POST.get('ip_address') or router_ip
-
         try:
-            package = Package.objects.get(id=package_id)
-            print(f"Package Found: {package.name} | Price: {package.price}")
+            data = json.loads(request.body)
+            amount = data.get('amount')
+            phone = data.get('phone')
+            package_name = data.get('package')
+            email = f"guest_{phone}@orbcybercafe.com"
 
-            # Format phone number to standard format
-            if phone_number.startswith('0'):
-                clean_phone = '254' + phone_number[1:]
-            elif not phone_number.startswith('254'):
-                clean_phone = '254' + phone_number
-            else:
-                clean_phone = phone_number
+            # Convert KSh to cents (multiply by 100 for Paystack)
+            amount_in_cents = int(float(amount) * 100)
 
-            # Paystack expects amount in KES kobo/cents (e.g., KES 10 = 1000)
-            amount_in_cents = int(float(package.price) * 100)
-
-            # Retrieve Paystack Secret Key from settings/environment
-            paystack_secret_key = getattr(settings, 'PAYSTACK_SECRET_KEY', 'sk_test_your_secret_key_here')
-            print(f"Secret Key Loaded: {'YES' if paystack_secret_key and not paystack_secret_key.startswith('sk_test_your_secret') else 'NO (Default/Missing)'}")
-
-            paystack_url = "https://api.paystack.co/transaction/initialize"
             headers = {
-                "Authorization": f"Bearer {paystack_secret_key}",
+                "Authorization": f"Bearer {PAYSTACK_SECRET_KEY}",
                 "Content-Type": "application/json"
             }
-            
-            callback_url = request.build_absolute_uri('/paystack/callback/')
 
             payload = {
                 "email": email,
                 "amount": amount_in_cents,
                 "currency": "KES",
-                "callback_url": callback_url,
                 "metadata": {
-                    "phone_number": clean_phone,
-                    "mac_address": mac_address,
-                    "ip_address": ip_address,
-                    "package_id": package.id
+                    "phone_number": phone,
+                    "package": package_name
                 }
             }
 
-            print("Sending Payload to Paystack:", payload)
-
-            # Call Paystack API
-            response = requests.post(paystack_url, json=payload, headers=headers)
-            print(f"Paystack HTTP Status Code: {response.status_code}")
-
+            response = requests.post(
+                "https://api.paystack.co/transaction/initialize",
+                headers=headers,
+                json=payload,
+                timeout=20
+            )
             res_data = response.json()
-            print("Paystack API Full Response:", res_data)
-            print("================ PAYSTACK DEBUG END ==================\n")
 
-            if res_data.get('status') and 'data' in res_data and 'authorization_url' in res_data['data']:
-                reference = res_data['data']['reference']
-                
-                # Create pending transaction record
-                Transaction.objects.create(
-                    phone_number=clean_phone,
-                    amount=package.price,
-                    package=package,
-                    mpesa_checkout_id=reference,
-                    mac_address=mac_address,
-                    ip_address=ip_address,
-                    status='PENDING'
-                )
-                
-                print(f"Redirecting user to Paystack: {res_data['data']['authorization_url']}")
-                return redirect(res_data['data']['authorization_url'])
-            else:
-                error_msg = res_data.get('message', 'Failed to initialize Paystack transaction.')
-                messages.error(request, f"Paystack Error: {error_msg}")
+            if res_data.get("status"):
+                return JsonResponse({
+                    "status": True,
+                    "authorization_url": res_data["data"]["authorization_url"]
+                })
+            return JsonResponse({"status": False, "message": res_data.get("message", "Initialization failed")})
 
-        except Package.DoesNotExist:
-            print("ERROR: Package.DoesNotExist for ID:", package_id)
-            messages.error(request, "Selected package is invalid.")
         except Exception as e:
-            print("EXCEPTION OCCURRED:", str(e))
-            messages.error(request, f"Error initializing payment: {str(e)}")
+            return JsonResponse({"status": False, "message": str(e)}, status=500)
 
-    return render(request, 'guest_portal.html', {
-        'packages': packages,
-        'router_mac': router_mac,
-        'router_ip': router_ip
-    })
-
+    return JsonResponse({"status": False, "message": "Invalid request method"}, status=400)
 
 
 
