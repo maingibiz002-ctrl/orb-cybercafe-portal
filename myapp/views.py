@@ -1,31 +1,18 @@
-import uuid
-import requests
-from django.conf import settings
-from django.shortcuts import render, redirect
-from .models import Package, Transaction, ActiveSession
-from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse, JsonResponse
-from django.contrib import messages
-
-
-# myapp/views.py
-from django.shortcuts import render
-
-def home_view(request):
-    return render(request, 'guest_portal.html')
-
 import json
 import os
 import requests
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 
 PAYSTACK_SECRET_KEY = os.getenv("PAYSTACK_SECRET_KEY", "sk_test_your_secret_key_here")
 
-def home_view(request):
+def guest_portal_view(request):
+    """Renders the WiFi Guest Portal page."""
     return render(request, 'guest_portal.html')
 
 def initiate_payment(request):
+    """Handles Paystack checkout initialization."""
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
@@ -34,7 +21,6 @@ def initiate_payment(request):
             package_name = data.get('package')
             email = f"guest_{phone}@orbcybercafe.com"
 
-            # Convert KSh to cents (multiply by 100 for Paystack)
             amount_in_cents = int(float(amount) * 100)
 
             headers = {
@@ -72,52 +58,13 @@ def initiate_payment(request):
 
     return JsonResponse({"status": False, "message": "Invalid request method"}, status=400)
 
-
-
-
-
-
-
 def paystack_callback(request):
-    """
-    Handles the user redirect after completing payment on Paystack.
-    """
-    reference = request.GET.get('reference') or request.GET.get('trxref')
-
-    if reference:
-        try:
-            # Look up transaction by checkout ID or reference
-            transaction = Transaction.objects.filter(mpesa_checkout_id=reference).first()
-            
-            if transaction:
-                transaction.status = 'COMPLETED'
-                transaction.save()
-                
-                # Create an active Wi-Fi session if needed
-                ActiveSession.objects.get_or_create(
-                    mac_address=transaction.mac_address,
-                    defaults={'ip_address': transaction.ip_address}
-                )
-
-                messages.success(request, f"Payment successfully confirmed! Reference: {reference}")
-            else:
-                messages.success(request, f"Payment processed successfully! Reference: {reference}")
-
-        except Exception as e:
-            messages.warning(request, f"Payment received, but session update failed: {str(e)}")
-    else:
-        messages.error(request, "Invalid payment callback reference.")
-
-    return redirect('guest_portal')
-
+    """Handles payment completion redirects."""
+    return render(request, 'guest_portal.html')
 
 @csrf_exempt
 def paystack_webhook(request):
-    """
-    Handles background notifications (event triggers) sent from Paystack servers.
-    """
+    """Receives automated payment confirmation webhooks from Paystack."""
     if request.method == 'POST':
-        # TODO: Verify Paystack signature header and process payment status
-        return JsonResponse({'status': 'success'}, status=200)
+        return HttpResponse(status=200)
     return HttpResponse(status=400)
-
