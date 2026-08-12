@@ -5,8 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orb Cyber Café - Guest Portal</title>
-    <!-- Updated Django static tag below -->
-    <link rel="stylesheet" href="{% static 'css/guest_portal.css' %}">
+    <link rel="stylesheet" href="{% static 'guest_portal.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -63,6 +62,39 @@
                 <button class="btn-pay" onclick="selectPackage('5_hours', 30)">Select & Pay</button>
             </div>
 
+            <!-- 24 Hours Package -->
+            <div class="package-card">
+                <h3>24 hours</h3>
+                <div class="price">Ksh. 60.00</div>
+                <p class="validity">
+                    <i class="fa-regular fa-clock"></i> 
+                    Valid for 24 Hours of continuous high-speed browsing.
+                </p>
+                <button class="btn-pay" onclick="selectPackage('24_hours', 60)">Select & Pay</button>
+            </div>
+
+            <!-- Weekly Package -->
+            <div class="package-card">
+                <h3>Weekly</h3>
+                <div class="price">Ksh. 200.00</div>
+                <p class="validity">
+                    <i class="fa-regular fa-clock"></i> 
+                    Valid for 7 Days of continuous high-speed browsing.
+                </p>
+                <button class="btn-pay" onclick="selectPackage('weekly', 200)">Select & Pay</button>
+            </div>
+
+            <!-- Monthly Package -->
+            <div class="package-card">
+                <h3>Monthly</h3>
+                <div class="price">Ksh. 750.00</div>
+                <p class="validity">
+                    <i class="fa-regular fa-clock"></i> 
+                    Valid for 30 Days of continuous high-speed browsing.
+                </p>
+                <button class="btn-pay" onclick="selectPackage('monthly', 750)">Select & Pay</button>
+            </div>
+
         </div>
     </main>
 
@@ -74,7 +106,6 @@
     <script>
         function selectPackage(pkg, amount) {
             alert('Selected ' + pkg + ' for Ksh. ' + amount);
-            // Trigger Paystack checkout or M-Pesa modal here
         }
     </script>
 </body>
