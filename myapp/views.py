@@ -62,8 +62,32 @@ def initiate_payment(request):
     return JsonResponse({"status": False, "message": "Invalid request method"}, status=400)
 
 def paystack_callback(request):
-    """Handles payment completion redirects."""
-    return render(request, 'guest_portal.html')
+    """Verifies Paystack payment reference and renders portal with success status."""
+    reference = request.GET.get('reference')
+    payment_successful = False
+
+    if reference:
+        headers = {
+            "Authorization": f"Bearer {PAYSTACK_SECRET_KEY}",
+        }
+        try:
+            res = requests.get(
+                f"https://api.paystack.co/transaction/verify/{reference}",
+                headers=headers,
+                timeout=15
+            )
+            res_data = res.json()
+            if res_data.get('status') and res_data.get('data', {}).get('status') == 'success':
+                payment_successful = True
+        except Exception:
+            payment_successful = False
+
+    packages = Package.objects.filter(is_active=True).order_by('price')
+    return render(request, 'guest_portal.html', {
+        'packages': packages,
+        'payment_success': payment_successful,
+        'reference': reference
+    })
 
 @csrf_exempt
 def paystack_webhook(request):

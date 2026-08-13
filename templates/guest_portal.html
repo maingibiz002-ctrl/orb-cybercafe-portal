@@ -23,6 +23,22 @@
             <i class="fa-solid fa-border-all"></i>
             <h2>Available Packages</h2>
         </div>
+    {% if payment_success %}
+<div class="success-card">
+    <div class="success-icon">
+        <i class="fa-solid fa-circle-check"></i>
+    </div>
+    <h2>Payment Complete!</h2>
+    <p>Your purchase was successful. You are now connected—enjoy surfing the internet!</p>
+    {% if reference %}
+    <span class="ref-tag">Ref: {{ reference }}</span>
+    {% endif %}
+    <br>
+    <button class="btn-pay" onclick="this.parentElement.style.display='none'" style="margin-top: 15px; width: auto; padding: 10px 25px;">
+        Start Surfing
+    </button>
+</div>
+{% endif %}
 
         <div class="package-grid">
     {% for package in packages %}

@@ -221,3 +221,40 @@ body {
 .modal-btn {
     margin-top: 10px;
 }
+/* Success Banner Styling */
+.success-card {
+    background: #f0fff4;
+    border: 2px solid #38a169;
+    border-radius: 12px;
+    padding: 25px;
+    text-align: center;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(56, 161, 105, 0.15);
+}
+
+.success-icon i {
+    font-size: 3.5rem;
+    color: #38a169;
+    margin-bottom: 12px;
+}
+
+.success-card h2 {
+    color: #276749;
+    font-size: 1.6rem;
+    margin-bottom: 8px;
+}
+
+.success-card p {
+    color: #2f855a;
+    font-size: 1.05rem;
+}
+
+.ref-tag {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 0.85rem;
+    color: #718096;
+    background: #edf2f7;
+    padding: 4px 10px;
+    border-radius: 4px;
+}
