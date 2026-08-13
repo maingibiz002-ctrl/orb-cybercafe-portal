@@ -25,3 +25,9 @@ class TransactionAdmin(admin.ModelAdmin):
 
 
 
+
+
+class PackageAdmin(admin.ModelAdmin):
+    list_display = ('name', 'price', 'is_active', 'created_at')
+    list_filter = ('is_active',)
+    search_fields = ('name',)

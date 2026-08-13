@@ -25,49 +25,24 @@
         </div>
 
         <div class="package-grid">
-            <div class="package-card">
-                <h3>1 hour</h3>
-                <div class="price">Ksh. 10.00</div>
-                <p class="validity"><i class="fa-regular fa-clock"></i> Valid for 1 Hour continuous browsing.</p>
-                <button class="btn-pay" onclick="selectPackage('1 hour', 10)">Select & Pay</button>
-            </div>
-
-            <div class="package-card">
-                <h3>3 hours</h3>
-                <div class="price">Ksh. 20.00</div>
-                <p class="validity"><i class="fa-regular fa-clock"></i> Valid for 3 Hours continuous browsing.</p>
-                <button class="btn-pay" onclick="selectPackage('3 hours', 20)">Select & Pay</button>
-            </div>
-
-            <div class="package-card">
-                <h3>5 hours</h3>
-                <div class="price">Ksh. 30.00</div>
-                <p class="validity"><i class="fa-regular fa-clock"></i> Valid for 5 Hours continuous browsing.</p>
-                <button class="btn-pay" onclick="selectPackage('5 hours', 30)">Select & Pay</button>
-            </div>
-
-            <div class="package-card">
-                <h3>24 hours</h3>
-                <div class="price">Ksh. 60.00</div>
-                <p class="validity"><i class="fa-regular fa-clock"></i> Valid for 24 Hours continuous browsing.</p>
-                <button class="btn-pay" onclick="selectPackage('24 hours', 60)">Select & Pay</button>
-            </div>
-
-            <div class="package-card">
-                <h3>Weekly</h3>
-                <div class="price">Ksh. 200.00</div>
-                <p class="validity"><i class="fa-regular fa-clock"></i> Valid for 7 Days continuous browsing.</p>
-                <button class="btn-pay" onclick="selectPackage('weekly', 200)">Select & Pay</button>
-            </div>
-
-            <div class="package-card">
-                <h3>Monthly</h3>
-                <div class="price">Ksh. 750.00</div>
-                <p class="validity"><i class="fa-regular fa-clock"></i> Valid for 30 Days continuous browsing.</p>
-                <button class="btn-pay" onclick="selectPackage('monthly', 750)">Select & Pay</button>
-            </div>
-        </div>
-    </main>
+    {% for package in packages %}
+    <div class="package-card">
+        <h3>{{ package.name }}</h3>
+        <div class="price">Ksh. {{ package.price }}</div>
+        <p class="validity">
+            <i class="fa-regular fa-clock"></i> 
+            {{ package.duration_description }}
+        </p>
+        <button class="btn-pay" onclick="selectPackage('{{ package.name|escapejs }}', {{ package.price }})">
+            Select & Pay
+        </button>
+    </div>
+    {% empty %}
+    <div style="grid-column: 1 / -1; text-align: center; padding: 20px;">
+        <p>No internet packages currently available.</p>
+    </div>
+    {% endfor %}
+</div>
 
     <!-- Payment Checkout Modal -->
     <div id="paymentModal" class="modal-overlay">

@@ -2,11 +2,18 @@ from django.db import models
 from django.utils import timezone
 
 # 1. THE PACKAGES (What you are selling, e.g., Ksh. 60 for 24 hours)
+
+
 class Package(models.Model):
-    name = models.CharField(max_length=50) # e.g., "24 Hours"
-    price = models.DecimalField(max_digits=10, decimal_places=2) # e.g., 60.00
-    duration_hours = models.IntegerField() # e.g., 24 (How long it lasts)
-    speed_limit = models.CharField(max_length=20, default="4M/4M") # e.g., "4M/4M" (Upload/Download)
+    name = models.CharField(max_length=100, help_text="e.g. 1 hour, 24 hours, Weekly")
+    price = models.DecimalField(max_digits=10, decimal_places=2, help_text="Price in Ksh, e.g. 10.00")
+    duration_description = models.CharField(
+        max_length=255, 
+        default="Valid for continuous high-speed browsing.",
+        help_text="e.g. Valid for 1 Hour of continuous high-speed browsing."
+    )
+    is_active = models.BooleanField(default=True, help_text="Uncheck to hide package from portal")
+    created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f"{self.name} - Ksh. {self.price}"

@@ -8,8 +8,10 @@ from django.views.decorators.csrf import csrf_exempt
 PAYSTACK_SECRET_KEY = os.getenv("PAYSTACK_SECRET_KEY", "sk_test_your_secret_key_here")
 
 def guest_portal_view(request):
-    """Renders the WiFi Guest Portal page."""
-    return render(request, 'guest_portal.html')
+    """Fetches active packages from database and renders portal."""
+    packages = Package.objects.filter(is_active=True).order_by('price')
+    return render(request, 'guest_portal.html', {'packages': packages})
+
 
 def initiate_payment(request):
     """Handles Paystack checkout initialization."""
