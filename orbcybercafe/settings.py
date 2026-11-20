@@ -39,6 +39,7 @@ ALLOWED_HOSTS = [
     '.ngrok-free.dev', 
     '.ngrok-free.app',
     '.onrender.com',
+    '.vercel.app',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
